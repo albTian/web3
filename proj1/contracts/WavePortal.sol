@@ -4,12 +4,16 @@ pragma solidity ^0.8.0;
 
 import "hardhat/console.sol";
 
+// Class like structure
 contract WavePortal {
-    // Internal state (kinda OOP)
+    // Instance variables
     uint256 totalWaves;
+    string mainMessage;
 
-    constructor() {
-        console.log("I might not be smart but my contract is");
+    constructor(string memory _mainMessage) {
+        // Set instance variables (or dont)
+        mainMessage = _mainMessage;
+        console.log("I might not be smart but my contract is: %s", mainMessage);
     }
 
     function wave() public {
@@ -21,5 +25,13 @@ contract WavePortal {
     function getTotalWaves() public view returns(uint256) {
         console.log("We have %d total waves", totalWaves);
         return totalWaves;
+    }
+
+    function setMessage(string memory _message) public {
+        mainMessage = _message;
+    }
+
+    function getMessage() public view returns(string memory) {
+        return mainMessage;
     }
 }

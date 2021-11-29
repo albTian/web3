@@ -2,8 +2,11 @@ const main = async () => {
     const ethers = hre.ethers
     const [owner, randomPerson] = await ethers.getSigners()
     const waveContractFactory = await ethers.getContractFactory('WavePortal');
-    const waveContract = await waveContractFactory.deploy();
+    
+    // Constructor called here with .deploy
+    const waveContract = await waveContractFactory.deploy("Hello world!");
     await waveContract.deployed();
+
     console.log(`Contract deployed to: ${waveContract.address}`);
     console.log(`Contract deployed by: ${owner.address}`);
 
@@ -13,8 +16,15 @@ const main = async () => {
     let waveTxn = await waveContract.wave()
     await waveTxn.wait()
 
+    waveTxn = await waveContract.connect(randomPerson).wave();
+    await waveTxn.wait();
+
     waveTotal = await waveContract.getTotalWaves()
     console.log(`Wavetotal: ${waveTotal}`)
+
+    await waveContract.setMessage("dogwater")
+    waveMessage = await waveContract.getMessage()
+    console.log(`WaveMessage: ${waveMessage}`);
 };
 
 const runMain = async () => {
