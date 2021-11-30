@@ -37,6 +37,8 @@ export const App = () => {
         const account = accounts[0];
         console.log("Found an authorized account:", account);
         setCurrentAccount(account);
+        console.log(`currentAccount: ${currentAccount}`);
+        
       } else {
         console.log("No authorized account found");
       }
