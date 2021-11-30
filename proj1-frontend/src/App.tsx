@@ -12,9 +12,14 @@ import {
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import { Logo } from "./Logo";
 import { useEffect, useState } from "react";
+import { ethers } from "ethers";
+import abi from "./utils/WavePortal.json";
 // import detectEthereumProvider from "@metamask/detect-provider";
 
 export const App = () => {
+  // Hardcoded address vars
+  const contractAddress = "0xA7B7E4ec4b5c3d7892690b6810F7F2C8a818d603";
+  const contractABI = abi.abi;
   // State to store currentAccount
   const [currentAccount, setCurrentAccount] = useState("");
   const toast = useToast();
@@ -24,16 +29,16 @@ export const App = () => {
     try {
       // To check if we actually have metamask
       // const provider = (await detectEthereumProvider()) as any;
-      const provider = window.ethereum;
-      if (!provider) {
+      const { ethereum } = window;
+      if (!ethereum) {
         console.log("Make sure you have metamask!");
         return;
       } else {
-        console.log("We have the provider object", provider);
+        console.log("We have the ethereum object", ethereum);
       }
 
       // Check if we have authorization
-      const accounts = await provider.request({ method: "eth_accounts" });
+      const accounts = await ethereum.request({ method: "eth_accounts" });
 
       // Get first account (?)
       if (accounts.length !== 0) {
@@ -52,8 +57,8 @@ export const App = () => {
   const connectWallet = async () => {
     try {
       // const provider = (await detectEthereumProvider()) as any;
-      const provider = window.ethereum;
-      if (!provider) {
+      const { ethereum } = window;
+      if (!ethereum) {
         // alert("Make sure you have metamask!");
         toast({
           title: "Make sure you have metamask!",
@@ -64,15 +69,45 @@ export const App = () => {
         });
         return;
       } else {
-        console.log("We have the provider object", provider);
+        console.log("We have the ethereum object", ethereum);
       }
 
-      const accounts = await provider.request({
+      // Actual request to connect metamask account
+      const accounts = await ethereum.request({
         method: "eth_requestAccounts",
       });
 
       console.log("Connected", accounts[0]);
       setCurrentAccount(accounts[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const wave = async () => {
+    try {
+      const { ethereum } = window;
+
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const wavePortalContract = new ethers.Contract(
+          contractAddress,
+          contractABI,
+          signer
+        );
+
+        const waveTxn = await wavePortalContract.wave();
+        console.log("Mining...", waveTxn.hash);
+
+        await waveTxn.wait();
+        console.log("Mined -- ", waveTxn.hash);
+
+        let count = await wavePortalContract.getTotalWaves();
+        console.log(`total of ${count.toNumber()} waves`);
+      } else {
+        console.log("no etherium object lol");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -103,7 +138,9 @@ export const App = () => {
           >
             Learn Chakra
           </Link>
-          {!currentAccount && (
+          {currentAccount ? (
+            <Button onClick={wave}>wave at me!</Button>
+          ) : (
             <Button onClick={connectWallet}>Connect Metamask</Button>
           )}
         </VStack>
