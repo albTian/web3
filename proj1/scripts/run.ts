@@ -1,3 +1,5 @@
+const hre = require("hardhat")
+
 const main = async () => {
     const ethers = hre.ethers
     const [owner, randomPerson] = await ethers.getSigners()
@@ -23,7 +25,7 @@ const main = async () => {
     console.log(`Wavetotal: ${waveTotal}`)
 
     await waveContract.setMessage("dogwater")
-    waveMessage = await waveContract.getMessage()
+    let waveMessage = await waveContract.getMessage()
     console.log(`WaveMessage: ${waveMessage}`);
 };
 
@@ -38,3 +40,6 @@ const runMain = async () => {
 };
 
 runMain();
+
+// To get TS to shut up about block scoping
+export {}

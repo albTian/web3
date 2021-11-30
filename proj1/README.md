@@ -13,3 +13,8 @@ npx hardhat node
 node scripts/sample-script.js
 npx hardhat help
 ```
+
+---
+To test,
+1. `npx hardhat node` Create local Etherium network
+2. `npx hardhat run scripts/deploy.ts --network localhost` Deploy locally
