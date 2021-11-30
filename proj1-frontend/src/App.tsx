@@ -38,7 +38,6 @@ export const App = () => {
         console.log("Found an authorized account:", account);
         setCurrentAccount(account);
         console.log(`currentAccount: ${currentAccount}`);
-        
       } else {
         console.log("No authorized account found");
       }
@@ -50,6 +49,8 @@ export const App = () => {
   // Run on load
   useEffect(() => {
     checkWalletConnection();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
