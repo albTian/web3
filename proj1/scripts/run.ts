@@ -1,32 +1,34 @@
-const hre = require("hardhat")
+// const hre = require("hardhat")
+import hre from "hardhat"
 
 const main = async () => {
+    // Basic setters
     const ethers = hre.ethers
     const [owner, randomPerson] = await ethers.getSigners()
     const waveContractFactory = await ethers.getContractFactory('WavePortal');
     
     // Constructor called here with .deploy
-    const waveContract = await waveContractFactory.deploy("Hello world!");
+    const waveContract = await waveContractFactory.deploy();
     await waveContract.deployed();
 
+    // Check addresses
     console.log(`Contract deployed to: ${waveContract.address}`);
     console.log(`Contract deployed by: ${owner.address}`);
 
-    let waveTotal
-    waveTotal = await waveContract.getTotalWaves()
 
-    let waveTxn = await waveContract.wave()
-    await waveTxn.wait()
+    // Send some waves from me and a randomAddress
+    let waveTxn = await waveContract.wave("from me: hi")
+    await waveTxn.wait()    // Wait for transaction to be mined...
+    waveTxn = await waveContract.connect(randomPerson).wave("from another: sup");
+    await waveTxn.wait();   // Wait for transaction to be mined...
 
-    waveTxn = await waveContract.connect(randomPerson).wave();
-    await waveTxn.wait();
-
-    waveTotal = await waveContract.getTotalWaves()
+    // Check total wave number and all waves
+    let waveTotal = await waveContract.getTotalWaves()
     console.log(`Wavetotal: ${waveTotal}`)
 
-    await waveContract.setMessage("dogwater")
-    let waveMessage = await waveContract.getMessage()
-    console.log(`WaveMessage: ${waveMessage}`);
+    let allWaves = await waveContract.getAllWaves()
+    console.log(allWaves);
+    
 };
 
 const runMain = async () => {

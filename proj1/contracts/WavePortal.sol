@@ -6,32 +6,53 @@ import "hardhat/console.sol";
 
 // Class like structure
 contract WavePortal {
-    // Instance variables
-    uint256 totalWaves;
-    string mainMessage;
+    // Event magic, to store it on the blockchain (???)
+    event NewWave(address indexed from, uint256 timestamp, string message);
 
-    constructor(string memory _mainMessage) {
-        // Set instance variables (or dont)
-        mainMessage = _mainMessage;
-        console.log("I might not be smart but my contract is: %s", mainMessage);
+    // Define a new sctruct, wave
+    struct Wave {
+        address waver;
+        uint256 timestamp;
+        string message;
+        // string url;
     }
 
-    function wave() public {
+    // Instance variables
+    uint256 totalWaves;
+    Wave[] waves;
+
+    constructor() {
+        // Set instance variables (or dont)
+        console.log("DOGWATER");
+    }
+
+    function wave(string memory _message) public {
         totalWaves += 1;
         console.log("%s sent a wave!", msg.sender);
+
+        // Push a wave into our array
+        waves.push(Wave(msg.sender, block.timestamp, _message));
+
+        // Emit a NewWave event to store it on the blockchain (???)
+        emit NewWave(msg.sender, block.timestamp, _message);
     }
 
     // function name() scope return() {}
-    function getTotalWaves() public view returns(uint256) {
+    function getTotalWaves() public view returns (uint256) {
         console.log("We have %d total waves", totalWaves);
         return totalWaves;
     }
 
-    function setMessage(string memory _message) public {
-        mainMessage = _message;
+    // function setMessage(string memory _message) public {
+    //     mainMessage = _message;
+    // }
+
+    function getMessage() public view returns (string memory) {
+        return waves[0].message;
     }
 
-    function getMessage() public view returns(string memory) {
-        return mainMessage;
+    function getAllWaves() public view returns (Wave[] memory) {
+        console.log("returning waves");
+        return waves;
     }
 }
