@@ -34,7 +34,7 @@ export const App = () => {
   useEffect(() => {
     (async () => {
       const account = await checkWalletConnection();
-      if (account) {
+      if (account && account !== currentAccount) {
         setCurrentAccount(account);
       }
     })();

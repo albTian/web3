@@ -37,14 +37,6 @@ const connectWallet = async (): Promise<any> => {
     // const provider = (await detectEthereumProvider()) as any;
     const { ethereum } = window;
     if (!ethereum) {
-      // alert("Make sure you have metamask!");
-      //   toast({
-      //     title: "Make sure you have metamask!",
-      //     description: "Get the chrome extension to connect your wallet",
-      //     status: "error",
-      //     duration: 9000,
-      //     isClosable: true,
-      //   });
       console.log("etheruum is null...?");
       return;
     }
