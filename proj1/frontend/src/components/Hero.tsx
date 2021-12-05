@@ -1,5 +1,11 @@
-import { Heading, Text, VStack } from "@chakra-ui/react";
+import { Heading, HStack, Text, VStack } from "@chakra-ui/react";
+import Image from "next/image";
 import React from "react";
+import coin from "../assets/img/coin_3d.png";
+import diamond from "../assets/img/diamond_3d.png";
+import pig from "../assets/img/piggy_bank_3d.png";
+
+const imageMap: StaticImageData[] = [coin, pig, diamond];
 
 export const Hero = ({
   title,
@@ -14,6 +20,11 @@ export const Hero = ({
     bgGradient="linear(to-l, #7928CA, #FF0080)"
     bgClip="text"
   >
+    <HStack>
+      {imageMap.map((img) => (
+        <Image src={img} />
+      ))}
+    </HStack>
     <Heading fontSize={[50, 75, 85]}>{title}</Heading>
     <Text>from {address.substring(0, 10)}...</Text>
   </VStack>

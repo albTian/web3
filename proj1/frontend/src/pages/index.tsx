@@ -73,7 +73,7 @@ const Index = () => {
         <ColorModeSwitcher justifySelf="flex-end" />
         <VStack
           spacing={8}
-          mt={"25vh"}
+          mt={"15vh"}
           mb={"10vh"}
           mx={"auto"}
           width={[300, 400, 500]}
