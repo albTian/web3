@@ -8,7 +8,8 @@ const main = async () => {
   console.log("Account balance: ", accountBalance.toString());
 
   const Token = await hre.ethers.getContractFactory("WavePortal");
-  const portal = await Token.deploy("Hello deez");
+  // Constructor called here
+  const portal = await Token.deploy();
   await portal.deployed();
 
   console.log("WavePortal address: ", portal.address);

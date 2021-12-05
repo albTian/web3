@@ -2,14 +2,17 @@ import * as React from "react";
 import { Box, Button, Grid, Input, useToast, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { checkWalletConnection, connectWallet } from "./api/walletAPI";
-import { getMessage, sendMessage, wave } from "./api/wavePortalAPI";
+import { getAllWaves, wave } from "./api/wavePortalAPI";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import Hero from "./components/Hero";
 import { Logo } from "./Logo";
 
 export const App = () => {
+  // API specific
   const [currentAccount, setCurrentAccount] = useState("");
-  const [message, setMessage] = useState("");
+  const [waves, setWaves] = useState<any[]>([]);
+
+  // Frontend specific
   const [inputMessage, setInputMessage] = useState("");
   const toast = useToast();
 
@@ -28,10 +31,22 @@ export const App = () => {
     }
   };
 
+  const updateAllWaves = async () => {
+    const newWaves = await getAllWaves();
+    if (newWaves) {
+      console.log(newWaves);
+      setWaves(newWaves);
+    } else {
+      console.log(`waves is empty or some shit went wrong`);
+    }
+  };
+
   const handleChange = (event: any) => setInputMessage(event.target.value);
 
   // Run on load
   useEffect(() => {
+    // Funky async magic to run async functions inside a non async signature
+    // Can use anything that needs account on startup in the snippet below
     (async () => {
       const account = await checkWalletConnection();
       if (account && account !== currentAccount) {
@@ -39,12 +54,7 @@ export const App = () => {
       }
     })();
 
-    (async () => {
-      const newMessage = await getMessage();
-      if (newMessage) {
-        setMessage(newMessage);
-      }
-    })();
+    updateAllWaves()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -55,7 +65,13 @@ export const App = () => {
         <ColorModeSwitcher justifySelf="flex-end" />
         <VStack spacing={8}>
           <Logo h="40vmin" pointerEvents="none" />
-          <Hero title={message} account={currentAccount} />
+          {waves.length > 0 && (
+            <Hero
+              title={waves[waves.length - 1].message}
+              account={waves[waves.length - 1].address}
+            />
+          )}
+          {/* Conditionally render connect button */}
           {currentAccount ? (
             <>
               <Input
@@ -63,10 +79,8 @@ export const App = () => {
                 onChange={handleChange}
                 placeholder={"Send me a message to show it here"}
               />
-              <Button onClick={() => sendMessage(inputMessage)}>
-                send message
-              </Button>
-              <Button onClick={wave}>wave at me!</Button>
+              <Button onClick={() => wave(inputMessage)}>wave at me!</Button>
+              <Button onClick={updateAllWaves}>update all waves</Button>
             </>
           ) : (
             <Button onClick={onConnectWallet}>Connect Metamask</Button>

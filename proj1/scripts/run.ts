@@ -23,11 +23,14 @@ const main = async () => {
     await waveTxn.wait();   // Wait for transaction to be mined...
 
     // Check total wave number and all waves
-    let waveTotal = await waveContract.getTotalWaves()
-    console.log(`Wavetotal: ${waveTotal}`)
+    // let waveTotal = await waveContract.getTotalWaveNum()
+    // console.log(`Wavetotal: ${waveTotal}`)
 
     let allWaves = await waveContract.getAllWaves()
     console.log(allWaves);
+
+    console.log(`We have ${allWaves.length} waves`);
+    
     
 };
 
