@@ -3,10 +3,8 @@ const checkWalletConnection = async (): Promise<any> => {
   let account = null;
   try {
     // To check if we actually have metamask
-    // const provider = (await detectEthereumProvider()) as any;
     const { ethereum } = window;
     if (!ethereum) {
-      console.log("Make sure you have metamask!");
       return null;
     }
 
@@ -16,9 +14,6 @@ const checkWalletConnection = async (): Promise<any> => {
     // Get first account (?)
     if (accounts.length !== 0) {
       account = accounts[0];
-      console.log("Found an authorized account:", account);
-      // setCurrentAccount(account);
-      // console.log(`currentAccount: ${currentAccount}`);
     } else {
       console.log("No authorized account found");
     }
@@ -32,12 +27,9 @@ const checkWalletConnection = async (): Promise<any> => {
 const connectWallet = async (): Promise<any> => {
   let account = null;
   try {
-    console.log("im here");
 
-    // const provider = (await detectEthereumProvider()) as any;
     const { ethereum } = window;
     if (!ethereum) {
-      console.log("etheruum is null...?");
       return;
     }
 
