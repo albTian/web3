@@ -1,5 +1,4 @@
-import { Heading, HStack, Text, VStack } from "@chakra-ui/react";
-import Image from "next/image";
+import { HStack, Text } from "@chakra-ui/react";
 import React from "react";
 import coin from "../assets/img/coin_3d.png";
 import diamond from "../assets/img/diamond_3d.png";

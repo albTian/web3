@@ -105,8 +105,8 @@ const Index = () => {
           {waves
             .slice(0)
             .reverse()
-            .map((wave) => (
-              <Wave message={wave.message} address={wave.address} />
+            .map((wave, index) => (
+              <Wave message={wave.message} address={wave.address} key={wave.address + index}/>
             ))}
         </VStack>
       </Grid>
