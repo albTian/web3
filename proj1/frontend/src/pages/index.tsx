@@ -1,29 +1,15 @@
 import {
-  Link as ChakraLink,
-  Text,
-  Code,
-  List,
-  ListIcon,
-  ListItem,
-  useToast,
   Box,
   Button,
   Grid,
-  Input,
-  VStack,
+  Input, useToast, VStack
 } from "@chakra-ui/react";
-import { CheckCircleIcon, LinkIcon } from "@chakra-ui/icons";
-
-import { Hero } from "../components/Hero";
-import { Container } from "../components/Container";
-import { Main } from "../components/Main";
-import { DarkModeSwitch } from "../components/DarkModeSwitch";
-import { CTA } from "../components/CTA";
-import { Footer } from "../components/Footer";
-import React, { useState, useEffect } from "react";
-import { connectWallet, checkWalletConnection } from "../api/walletAPI";
+import React, { useEffect, useState } from "react";
+import { checkWalletConnection, connectWallet } from "../api/walletAPI";
 import { getAllWaves, wave } from "../api/wavePortalAPI";
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
+import { Hero } from "../components/Hero";
+
 
 // const Index = () => (
 //   <Container height="100vh">
