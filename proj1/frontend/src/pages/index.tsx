@@ -4,6 +4,7 @@ import { checkWalletConnection, connectWallet } from "../api/walletAPI";
 import { getAllWaves, wave } from "../api/wavePortalAPI";
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
 import { Hero } from "../components/Hero";
+import Wave from "../components/Wave";
 
 const Index = () => {
   // API specific
@@ -101,12 +102,12 @@ const Index = () => {
           ) : (
             <Button onClick={onConnectWallet}>Connect Metamask</Button>
           )}
-          {waves.map((wave) => (
-            <Box key={wave.address}>
-              {wave.address.substring(0, 10)}...
-              {wave.message}
-            </Box>
-          ))}
+          {waves
+            .slice(0)
+            .reverse()
+            .map((wave) => (
+              <Wave message={wave.message} address={wave.address} />
+            ))}
         </VStack>
       </Grid>
     </Box>
