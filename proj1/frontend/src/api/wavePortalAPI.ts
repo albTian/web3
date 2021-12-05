@@ -8,7 +8,6 @@ const contractABI = abi.abi;
 // Helper function to initiate a wave. Returns the new total number of waves
 
 // Input: (string) message of the wave
-// Output: (wave) the newly created wave
 const wave = async (_message: string) => {
   try {
     const { ethereum } = window;

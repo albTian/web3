@@ -1,53 +1,9 @@
-import {
-  Box,
-  Button,
-  Grid,
-  Input, useToast, VStack
-} from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import { Box, Button, Grid, Input, useToast, VStack } from "@chakra-ui/react";
+import React, { BaseSyntheticEvent, useEffect, useState } from "react";
 import { checkWalletConnection, connectWallet } from "../api/walletAPI";
 import { getAllWaves, wave } from "../api/wavePortalAPI";
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
 import { Hero } from "../components/Hero";
-
-
-// const Index = () => (
-//   <Container height="100vh">
-//     <Hero />
-//     <Main>
-//       <Text>
-//         Example repository of <Code>Next.js</Code> + <Code>chakra-ui</Code> +{' '}
-//         <Code>TypeScript</Code>.
-//       </Text>
-
-//       <List spacing={3} my={0}>
-//         <ListItem>
-//           <ListIcon as={CheckCircleIcon} color="green.500" />
-//           <ChakraLink
-//             isExternal
-//             href="https://chakra-ui.com"
-//             flexGrow={1}
-//             mr={2}
-//           >
-//             Chakra UI <LinkIcon />
-//           </ChakraLink>
-//         </ListItem>
-//         <ListItem>
-//           <ListIcon as={CheckCircleIcon} color="green.500" />
-//           <ChakraLink isExternal href="https://nextjs.org" flexGrow={1} mr={2}>
-//             Next.js <LinkIcon />
-//           </ChakraLink>
-//         </ListItem>
-//       </List>
-//     </Main>
-
-//     <DarkModeSwitch />
-//     <Footer>
-//       <Text>Next ❤️ Chakra</Text>
-//     </Footer>
-//     <CTA />
-//   </Container>
-// )
 
 const Index = () => {
   // API specific
@@ -83,7 +39,17 @@ const Index = () => {
     }
   };
 
+  const onWave = async (_message: string) => {
+    await wave(_message);
+    updateAllWaves();
+  };
+
   const handleChange = (event: any) => setInputMessage(event.target.value);
+
+  const submitHandler = (event: BaseSyntheticEvent) => {
+    event.preventDefault();
+    onWave(inputMessage);
+  };
 
   // Run on load
   useEffect(() => {
@@ -105,8 +71,15 @@ const Index = () => {
     <Box textAlign="center" fontSize="xl">
       <Grid minH="100vh" p={3}>
         <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          {/* <Logo h="40vmin" pointerEvents="none" /> */}
+        <VStack
+          spacing={8}
+          mt={"25vh"}
+          mb={"10vh"}
+          mx={"auto"}
+          width={[300, 400, 500]}
+          as={"form"}
+          onSubmit={submitHandler}
+        >
           {waves.length > 0 && (
             <Hero
               title={waves[waves.length - 1].message}
@@ -121,12 +94,19 @@ const Index = () => {
                 onChange={handleChange}
                 placeholder={"Send me a message to show it here"}
               />
-              <Button onClick={() => wave(inputMessage)}>wave at me!</Button>
-              <Button onClick={updateAllWaves}>update all waves</Button>
+              <Button width={"100%"} type="submit">
+                👋 wave at me!
+              </Button>
             </>
           ) : (
             <Button onClick={onConnectWallet}>Connect Metamask</Button>
           )}
+          {waves.map((wave) => (
+            <Box key={wave.address}>
+              {wave.address.substring(0, 10)}...
+              {wave.message}
+            </Box>
+          ))}
         </VStack>
       </Grid>
     </Box>
