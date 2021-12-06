@@ -1,4 +1,10 @@
-import { Box, Button, Grid, Textarea, useToast, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Grid,
+  Input, useToast,
+  VStack
+} from "@chakra-ui/react";
 import React, { BaseSyntheticEvent, useEffect, useState } from "react";
 import { checkWalletConnection, connectWallet } from "../api/walletAPI";
 import { getAllWaves, wave } from "../api/wavePortalAPI";
@@ -14,7 +20,9 @@ const Index = () => {
   // Frontend specific
   const [inputMessage, setInputMessage] = useState("");
   const toast = useToast();
-  let isMining = false;
+  // let isMining = false;
+  const [isMining, setIsMining] = useState(false)
+
 
   const onConnectWallet = async () => {
     const account = await connectWallet();
@@ -42,10 +50,12 @@ const Index = () => {
   };
 
   const onWave = async (_message: string) => {
-    isMining = true
+    setIsMining(true)
+    console.log(`isMining: ${isMining}`);
     await wave(_message);
     updateAllWaves();
-    isMining = false
+    setIsMining(false)
+    console.log(`isMining: ${isMining}`);
   };
 
   const handleChange = (event: any) => setInputMessage(event.target.value);
@@ -93,12 +103,12 @@ const Index = () => {
           {/* Conditionally render connect button */}
           {currentAccount ? (
             <>
-              <Textarea
+              <Input
                 value={inputMessage}
                 onChange={handleChange}
                 placeholder={"Send me a message to show it here"}
               />
-              <Button width={"100%"} type="submit">
+              <Button width={"100%"} type="submit" isLoading={isMining} loadingText={"mining ..."}>
                 👋 wave at me!
               </Button>
             </>
@@ -109,7 +119,11 @@ const Index = () => {
             .slice(0)
             .reverse()
             .map((wave, index) => (
-              <Wave message={wave.message} address={wave.address} key={wave.address + index}/>
+              <Wave
+                message={wave.message}
+                address={wave.address}
+                key={wave.address + index}
+              />
             ))}
         </VStack>
       </Grid>

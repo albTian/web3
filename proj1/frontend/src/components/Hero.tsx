@@ -22,7 +22,7 @@ export const Hero = ({
   >
     <HStack>
       {imageMap.map((img) => (
-        <Image src={img} key={img.toString()} alt={img.toString()}/>
+        <Image src={img} key={img.src} alt={img.src}/>
       ))}
     </HStack>
     <Heading fontSize={[50, 75, 85]}>{title}</Heading>
