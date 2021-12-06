@@ -4,7 +4,7 @@ import { checkWalletConnection, connectWallet } from "../api/walletAPI";
 import { getAllWaves, wave } from "../api/wavePortalAPI";
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
 import Hero from "../components/Hero";
-import Wave from "../components/Wave";
+import Waves from "../components/Waves";
 
 const Index = () => {
   // API specific
@@ -58,7 +58,7 @@ const Index = () => {
 
   // Run on load
   useEffect(() => {
-    // Funky async magic to run async functions inside a non async signature
+    // Funky async magic to run async functions inside a non async signature and use the awaited value
     // Can use anything that needs account on startup in the snippet below
     (async () => {
       const account = await checkWalletConnection();
@@ -86,10 +86,7 @@ const Index = () => {
           as={"form"}
           onSubmit={submitHandler}
         >
-          <Hero
-            title="web3 playground"
-            description="A hello world type project for smart contracts, etherium and metamask integration. Send me a wave for a chance at some ETH!"
-          />
+          <Hero />
           {/* Conditionally render connect button */}
           {currentAccount ? (
             <>
@@ -110,7 +107,7 @@ const Index = () => {
           ) : (
             <Button onClick={onConnectWallet}>Connect Metamask</Button>
           )}
-          {waves
+          {/* {waves
             .slice(0)
             .reverse()
             .map((wave, index) => (
@@ -119,7 +116,8 @@ const Index = () => {
                 address={wave.address}
                 key={wave.address + index}
               />
-            ))}
+            ))} */}
+          <Waves waves={waves} />
         </VStack>
       </Grid>
     </Box>

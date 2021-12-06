@@ -8,26 +8,29 @@ import {
   Text,
   VStack,
   Link,
+  Box,
 } from "@chakra-ui/react";
 import Image from "next/image";
-// import Link from "next/link";
 import React from "react";
 import diamond from "../assets/img/diamond.png";
 import unicorn from "../assets/img/unicorn.png";
 import me from "../assets/img/me.png";
 
+const title = "web3 playground";
+const description =
+  "A hello world type project for smart contracts, etherium and metamask integration. Send me a wave for a chance at some ETH!";
+
 const imageMap: HoverEmojiProps[] = [
   {
     emoji: diamond,
-    title: "something",
-    description:
-      "ehhhhhh law of thirds lol",
-    href: "/about",
+    title: "coming soon...",
+    description: "the next project, yet to be built...",
+    href: "https://bit.ly/ai-ref",
   },
   {
     emoji: me,
     title: "About me",
-    description: "I'm Albert, a CS student at UC Berkeley",
+    description: "I'm Albert, a CS student at UC Berkeley diving into web3. ",
     href: "https://atian.super.site/",
   },
   {
@@ -46,18 +49,20 @@ interface HoverEmojiProps {
   href: string;
 }
 
-const HoverEmoji = (props: HoverEmojiProps) => {
+const HoverEmoji = ({ emoji, title, description, href }: HoverEmojiProps) => {
   const sizing = ["75px", "100px", "120px"];
+  // const Outter = href ? Link : Box
+
   return (
     <Popover trigger="hover">
       <PopoverTrigger>
-        <Link href={props.href} target={"_blank"} w={sizing} h={sizing}>
-          <Image src={props.emoji} />
+        <Link href={href} target={"_blank"} w={sizing} h={sizing}>
+          <Image src={emoji} />
         </Link>
       </PopoverTrigger>
       <PopoverContent border="0px" bg="transparent">
         <Link
-          href={props.href}
+          href={href}
           rounded={"md"}
           target={"_blank"}
           bg="#7928CA"
@@ -65,8 +70,8 @@ const HoverEmoji = (props: HoverEmojiProps) => {
           _hover={{ bg: "#441DA9", transition: ".2s" }}
         >
           <Stack color="white" p={4} fontSize={"sm"} textAlign={"center"}>
-            <Text fontWeight={800}>{props.title}</Text>
-            <Text>{props.description}</Text>
+            <Text fontWeight={800}>{title}</Text>
+            <Text>{description}</Text>
           </Stack>
         </Link>
       </PopoverContent>
@@ -74,13 +79,7 @@ const HoverEmoji = (props: HoverEmojiProps) => {
   );
 };
 
-const Hero = ({
-  title,
-  description,
-}: {
-  title: string;
-  description: string;
-}) => (
+const Hero = () => (
   <VStack
     justifyContent="center"
     alignItems="center"
@@ -104,10 +103,5 @@ const Hero = ({
     <Text>{description}</Text>
   </VStack>
 );
-
-Hero.defaultProps = {
-  title: "with-chakra-ui-typescript",
-  description: "no one",
-};
 
 export default Hero;
