@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Input, useToast, VStack } from "@chakra-ui/react";
+import { Box, Button, Grid, Textarea, useToast, VStack } from "@chakra-ui/react";
 import React, { BaseSyntheticEvent, useEffect, useState } from "react";
 import { checkWalletConnection, connectWallet } from "../api/walletAPI";
 import { getAllWaves, wave } from "../api/wavePortalAPI";
@@ -90,7 +90,7 @@ const Index = () => {
           {/* Conditionally render connect button */}
           {currentAccount ? (
             <>
-              <Input
+              <Textarea
                 value={inputMessage}
                 onChange={handleChange}
                 placeholder={"Send me a message to show it here"}
