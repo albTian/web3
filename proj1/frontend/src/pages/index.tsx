@@ -14,6 +14,7 @@ const Index = () => {
   // Frontend specific
   const [inputMessage, setInputMessage] = useState("");
   const toast = useToast();
+  let isMining = false;
 
   const onConnectWallet = async () => {
     const account = await connectWallet();
@@ -41,8 +42,10 @@ const Index = () => {
   };
 
   const onWave = async (_message: string) => {
+    isMining = true
     await wave(_message);
     updateAllWaves();
+    isMining = false
   };
 
   const handleChange = (event: any) => setInputMessage(event.target.value);
