@@ -8,7 +8,8 @@ const contractABI = abi.abi;
 // Helper function to initiate a wave. Returns the new total number of waves
 
 // Input: (string) message of the wave
-const wave = async (_message: string) => {
+// Output: if the wave succeeded
+const wave = async (_message: string): Promise<boolean> => {
   try {
     const { ethereum } = window;
 
@@ -28,11 +29,14 @@ const wave = async (_message: string) => {
 
       await waveTxn.wait();
       console.log("Mined -- ", waveTxn.hash);
+      return true
     } else {
       console.log("no etherium object lol");
+      return false
     }
   } catch (error) {
     console.log(error);
+    return false
   }
 };
 

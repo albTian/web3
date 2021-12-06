@@ -14,7 +14,6 @@ const Index = () => {
   // Frontend specific
   const [inputMessage, setInputMessage] = useState("");
   const toast = useToast();
-  // let isMining = false;
   const [isMining, setIsMining] = useState(false);
 
   const onConnectWallet = async () => {
@@ -26,7 +25,7 @@ const Index = () => {
         title: "Make sure you have metamask!",
         description: "Get the chrome extension to connect your wallet",
         status: "error",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
       });
     }
@@ -44,7 +43,16 @@ const Index = () => {
 
   const onWave = async (_message: string) => {
     setIsMining(true);
-    await wave(_message);
+    const waveSuccess = await wave(_message);
+    if (!waveSuccess) {
+      toast({
+        title: "Something went wrong...",
+        description: "You may only send 1 wave per minute to prevent spamming",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
     updateAllWaves();
     setIsMining(false);
   };

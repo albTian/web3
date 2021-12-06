@@ -32,7 +32,7 @@ const imageMap: HoverEmojiProps[] = [
   {
     emoji: me,
     title: "About me",
-    description: "I'm Albert, a CS student at UC Berkeley diving into web3. ",
+    description: "I'm Albert, a junior at UC Berkeley diving into web3. With my spare time I love to tinker on projects (like this one) and lift weights. Thanks for stopping by!",
     href: "https://atian.super.site/",
   },
   {

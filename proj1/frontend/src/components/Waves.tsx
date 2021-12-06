@@ -67,7 +67,7 @@ const Waves = ({ waves }: { waves: any[] }) => {
           </>
         )}
       </HStack>
-      {waves.map((wave: any) => (
+      {waves.slice().reverse().map((wave: any) => (
         <Wave
           message={wave.message}
           address={wave.address}
