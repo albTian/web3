@@ -6,6 +6,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React from "react";
+import theme from "../theme";
 
 // TODO: Create a wave interface
 const Wave = ({
@@ -22,7 +23,7 @@ const Wave = ({
   <HStack
     justifyContent="space-between"
     alignItems="top"
-    bgGradient="linear(to-l, #7928CA, #FF0080)"
+    bgGradient={theme.colors.gradient}
     bgClip="text"
     width={"100%"}
     borderRadius="5px"
@@ -42,7 +43,7 @@ const Wave = ({
 );
 
 const Waves = ({ waves }: { waves: any[] }) => {
-  const color = useColorModeValue("#7928CA", "#FF0080");
+  const color = useColorModeValue(theme.colors.purple, theme.colors.pink);
   const isLarge = useBreakpointValue({ base: false, sm: true });
 
   return (
@@ -57,12 +58,12 @@ const Waves = ({ waves }: { waves: any[] }) => {
           w={isLarge ? "40%" : "100%"}
           textAlign={isLarge ? "left" : "center"}
         >
-          {`message${isLarge ? "" : "s"}`}
+          {`✨ message${isLarge ? "" : "s"}`}
         </Text>
         {isLarge && (
           <>
-            <Text>timestamp</Text>
-            <Text>address</Text>
+            <Text>⌛ timestamp</Text>
+            <Text>🏠 address</Text>
           </>
         )}
       </HStack>

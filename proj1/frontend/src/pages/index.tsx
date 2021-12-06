@@ -107,16 +107,6 @@ const Index = () => {
           ) : (
             <Button onClick={onConnectWallet}>Connect Metamask</Button>
           )}
-          {/* {waves
-            .slice(0)
-            .reverse()
-            .map((wave, index) => (
-              <Wave
-                message={wave.message}
-                address={wave.address}
-                key={wave.address + index}
-              />
-            ))} */}
           <Waves waves={waves} />
         </VStack>
       </Grid>

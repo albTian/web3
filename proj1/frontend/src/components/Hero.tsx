@@ -9,12 +9,14 @@ import {
   VStack,
   Link,
   Box,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import React from "react";
 import diamond from "../assets/img/diamond.png";
 import unicorn from "../assets/img/unicorn.png";
 import me from "../assets/img/me.png";
+import theme from "../theme";
 
 const title = "web3 playground";
 const description =
@@ -37,7 +39,7 @@ const imageMap: HoverEmojiProps[] = [
     emoji: unicorn,
     title: "Buildspace",
     description:
-      "Huge shoutout to Buildspace and Farza for this project! Check them out for some sick crypto development tutorials",
+      "Huge shoutout to Buildspace and Farza for this project (and color scheme)! Check them out for some sick crypto development tutorials",
     href: "https://buildspace.so/",
   },
 ];
@@ -51,6 +53,9 @@ interface HoverEmojiProps {
 
 const HoverEmoji = ({ emoji, title, description, href }: HoverEmojiProps) => {
   const sizing = ["75px", "100px", "120px"];
+  const bgColor = useColorModeValue(theme.colors.purple, theme.colors.pink);
+  const textColor = useColorModeValue("white", theme.colors.black);
+
   // const Outter = href ? Link : Box
 
   return (
@@ -65,11 +70,11 @@ const HoverEmoji = ({ emoji, title, description, href }: HoverEmojiProps) => {
           href={href}
           rounded={"md"}
           target={"_blank"}
-          bg="#7928CA"
+          bg={bgColor}
           transition=".2s"
           _hover={{ bg: "#441DA9", transition: ".2s" }}
         >
-          <Stack color="white" p={4} fontSize={"sm"} textAlign={"center"}>
+          <Stack color={textColor} p={4} fontSize={"sm"} textAlign={"center"}>
             <Text fontWeight={800}>{title}</Text>
             <Text>{description}</Text>
           </Stack>
@@ -83,7 +88,7 @@ const Hero = () => (
   <VStack
     justifyContent="center"
     alignItems="center"
-    bgGradient="linear(to-l, #7928CA, #FF0080)"
+    bgGradient={theme.colors.gradient}
     bgClip="text"
   >
     <HStack justifyContent="space-between" w={"100%"}>
