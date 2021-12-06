@@ -20,7 +20,7 @@ contract WavePortal {
     // Instance variables
     Wave[] waves;
 
-    constructor() {
+    constructor() payable {
         // Set instance variables (or dont)
         console.log("DOGWATER");
     }
@@ -36,6 +36,14 @@ contract WavePortal {
 
         // Emit a NewWave event to store it on the blockchain (???)
         emit NewWave(msg.sender, block.timestamp, _message);
+
+        // Check if I have enough eth to give them any money
+        uint256 prizeAmount = 0.0001 ether;
+        require(prizeAmount <= address(this).balance, "I'm poor");
+
+        // Actually withdraw the money from my account and send it
+        (bool success, ) = (msg.sender).call{value: prizeAmount}("");
+        require(success, "Failed to withdraw money from contract.");
     }
 
     // to get all waves (not just wave number)

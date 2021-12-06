@@ -1,18 +1,34 @@
-const hre = require("hardhat");
+// const hre = require("hardhat");
+import { HardhatEthersHelpers } from "@nomiclabs/hardhat-ethers/types";
+import hre from "hardhat";
+
+// List of contracts to deploy (doesn't support contracts with non empty constructors atm)
+// const contractList: string[] = ["WavePortal"];
+// Can deploy multiple contracts here, but need to keep track of their individual addresses (??)
+// contractList.map(async (contract) => {
+// });
 
 const main = async () => {
-  const [deployer] = await hre.ethers.getSigners();
+  // SETTERS
+  const ethers = hre.ethers;
+  const [deployer] = await ethers.getSigners();
   const accountBalance = await deployer.getBalance();
-
   console.log("Deploying contracts with account: ", deployer.address);
   console.log("Account balance: ", accountBalance.toString());
 
-  const Token = await hre.ethers.getContractFactory("WavePortal");
-  // Constructor called here
-  const portal = await Token.deploy();
-  await portal.deployed();
+  const contract = "WavePortal";
+  console.log(`Deploying contract: ${contract} ...`);
 
-  console.log("WavePortal address: ", portal.address);
+  // INTERACTIONS
+  const waveContractFactory = await hre.ethers.getContractFactory("WavePortal");
+  const waveContract = await waveContractFactory.deploy({
+    value: hre.ethers.utils.parseEther("0.001"),
+  });
+
+  await waveContract.deployed();
+
+  // CHECKS
+  console.log(`${contract} address: ${waveContract.address}\n`);
 };
 
 const runMain = async () => {
@@ -27,4 +43,4 @@ const runMain = async () => {
 
 runMain();
 
-export {}
+export {};
