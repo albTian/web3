@@ -1,15 +1,9 @@
-import {
-  Box,
-  Button,
-  Grid,
-  Input, useToast,
-  VStack
-} from "@chakra-ui/react";
+import { Box, Button, Grid, Input, useToast, VStack } from "@chakra-ui/react";
 import React, { BaseSyntheticEvent, useEffect, useState } from "react";
 import { checkWalletConnection, connectWallet } from "../api/walletAPI";
 import { getAllWaves, wave } from "../api/wavePortalAPI";
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
-import { Hero } from "../components/Hero";
+import Hero from "../components/Hero";
 import Wave from "../components/Wave";
 
 const Index = () => {
@@ -21,8 +15,7 @@ const Index = () => {
   const [inputMessage, setInputMessage] = useState("");
   const toast = useToast();
   // let isMining = false;
-  const [isMining, setIsMining] = useState(false)
-
+  const [isMining, setIsMining] = useState(false);
 
   const onConnectWallet = async () => {
     const account = await connectWallet();
@@ -50,12 +43,10 @@ const Index = () => {
   };
 
   const onWave = async (_message: string) => {
-    setIsMining(true)
-    console.log(`isMining: ${isMining}`);
+    setIsMining(true);
     await wave(_message);
     updateAllWaves();
-    setIsMining(false)
-    console.log(`isMining: ${isMining}`);
+    setIsMining(false);
   };
 
   const handleChange = (event: any) => setInputMessage(event.target.value);
@@ -85,30 +76,34 @@ const Index = () => {
     <Box textAlign="center" fontSize="xl">
       <Grid minH="100vh" p={3}>
         <ColorModeSwitcher justifySelf="flex-end" />
+        {/* The entire center stack */}
         <VStack
           spacing={8}
           mt={"15vh"}
           mb={"10vh"}
           mx={"auto"}
-          width={[300, 400, 500]}
+          width={[325, 450, 600]}
           as={"form"}
           onSubmit={submitHandler}
         >
-          {waves.length > 0 && (
-            <Hero
-              title={waves[waves.length - 1].message}
-              address={waves[waves.length - 1].address}
-            />
-          )}
+          <Hero
+            title="web3 playground"
+            description="A hello world type project for smart contracts, etherium and metamask integration. Send me a wave for a chance at some ETH!"
+          />
           {/* Conditionally render connect button */}
           {currentAccount ? (
             <>
               <Input
                 value={inputMessage}
                 onChange={handleChange}
-                placeholder={"Send me a message to show it here"}
+                placeholder={"Send me a message to show it below"}
               />
-              <Button width={"100%"} type="submit" isLoading={isMining} loadingText={"mining ..."}>
+              <Button
+                width={"100%"}
+                type="submit"
+                isLoading={isMining}
+                loadingText={"mining ..."}
+              >
                 👋 wave at me!
               </Button>
             </>
