@@ -29,6 +29,13 @@ const main = async () => {
   await waveTxn.wait(); // Wait for transaction to be mined...
   waveTxn = await waveContract.connect(randomPerson).wave("from another: sup");
   await waveTxn.wait(); // Wait for transaction to be mined...
+  try {
+    waveTxn = await waveContract.wave("THIS SHOULD FAIL");
+    await waveTxn.wait(); // Wait for transaction to be mined...
+    console.log("SPAM FILTER HAS FAILED");
+  } catch (error) {
+    console.log("Spam filter is working!");
+  }
 
   // CHECKS
   // Check updated contract balance

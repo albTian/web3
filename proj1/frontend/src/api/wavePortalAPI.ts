@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import abi from "../utils/WavePortal.json";
 
 // Update this
-const contractAddress = "0xe34E257Ac0a465dAE65a641B375D2e79D5e91200";
+const contractAddress = "0xB1D4844C51DE0c13D12Ce9CeA6825deFffBbDc9D";
 const contractABI = abi.abi;
 
 // Helper function to initiate a wave. Returns the new total number of waves
