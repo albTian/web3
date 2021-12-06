@@ -56,13 +56,11 @@ const HoverEmoji = ({ emoji, title, description, href }: HoverEmojiProps) => {
   const bgColor = useColorModeValue(theme.colors.purple, theme.colors.pink);
   const textColor = useColorModeValue("white", theme.colors.black);
 
-  // const Outter = href ? Link : Box
-
   return (
     <Popover trigger="hover">
       <PopoverTrigger>
         <Link href={href} target={"_blank"} w={sizing} h={sizing}>
-          <Image src={emoji} />
+          <Image src={emoji} alt={title}/>
         </Link>
       </PopoverTrigger>
       <PopoverContent border="0px" bg="transparent">
