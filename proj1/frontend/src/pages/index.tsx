@@ -1,4 +1,5 @@
 import { Box, Button, Grid, Input, useToast, VStack } from "@chakra-ui/react";
+import { ethers } from "ethers";
 import React, { BaseSyntheticEvent, useEffect, useState } from "react";
 import { checkWalletConnection, connectWallet } from "../api/walletAPI";
 import { getAllWaves, wave } from "../api/wavePortalAPI";
@@ -80,6 +81,43 @@ const Index = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /**
+   * Listen in for emitter events!
+  //  */
+  // useEffect(() => {
+  //   let wavePortalContract: ethers.Contract;
+
+  //   const onNewWave = (from, timestamp, message) => {
+  //     console.log("NewWave", from, timestamp, message);
+  //     setWaves((prevState) => [
+  //       ...prevState,
+  //       {
+  //         address: from,
+  //         timestamp: new Date(timestamp * 1000),
+  //         message: message,
+  //       },
+  //     ]);
+  //   };
+
+  //   if (window.ethereum) {
+  //     const provider = new ethers.providers.Web3Provider(window.ethereum);
+  //     const signer = provider.getSigner();
+
+  //     wavePortalContract = new ethers.Contract(
+  //       contractAddress,
+  //       contractABI,
+  //       signer
+  //     );
+  //     wavePortalContract.on("NewWave", onNewWave);
+  //   }
+
+  //   return () => {
+  //     if (wavePortalContract) {
+  //       wavePortalContract.off("NewWave", onNewWave);
+  //     }
+  //   };
+  // }, []);
+
   return (
     <Box textAlign="center" fontSize="xl">
       <Grid minH="100vh" p={3}>
@@ -111,11 +149,11 @@ const Index = () => {
               >
                 👋 wave at me!
               </Button>
+              <Waves waves={waves} />
             </>
           ) : (
             <Button onClick={onConnectWallet}>Connect Metamask</Button>
           )}
-          <Waves waves={waves} />
         </VStack>
       </Grid>
     </Box>

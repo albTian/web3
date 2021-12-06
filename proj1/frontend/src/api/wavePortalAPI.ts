@@ -24,19 +24,21 @@ const wave = async (_message: string): Promise<boolean> => {
 
       // wave has signature
       // wave(string: message)
-      const waveTxn = await wavePortalContract.wave(_message);
+      const waveTxn = await wavePortalContract.wave(_message, {
+        gasLimit: 300000,
+      });
       console.log("Mining...", waveTxn.hash);
 
       await waveTxn.wait();
       console.log("Mined -- ", waveTxn.hash);
-      return true
+      return true;
     } else {
       console.log("no etherium object lol");
-      return false
+      return false;
     }
   } catch (error) {
     console.log(error);
-    return false
+    return false;
   }
 };
 
