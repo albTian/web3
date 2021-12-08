@@ -2,7 +2,7 @@ import { Box, Button, Grid, Input, useToast, VStack } from "@chakra-ui/react";
 import { ethers } from "ethers";
 import React, { BaseSyntheticEvent, useEffect, useState } from "react";
 import { checkWalletConnection, connectWallet } from "../api/walletAPI";
-import { getAllWaves, wave } from "../api/wavePortalAPI";
+import { getAllWaves, getWaveContract, wave } from "../api/wavePortalAPI";
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
 import Hero from "../components/Hero";
 import Waves from "../components/Waves";
@@ -21,6 +21,7 @@ const Index = () => {
     const account = await connectWallet();
     if (account) {
       setCurrentAccount(account);
+      updateAllWaves()
     } else {
       toast({
         title: "Make sure you have metamask!",
@@ -84,39 +85,18 @@ const Index = () => {
   /**
    * Listen in for emitter events!
   //  */
-  // useEffect(() => {
-  //   let wavePortalContract: ethers.Contract;
+  useEffect(() => {
+    const wavePortalContract = getWaveContract();
+    if (wavePortalContract) {
+      wavePortalContract.on('NewWave', updateAllWaves)
+    }
 
-  //   const onNewWave = (from, timestamp, message) => {
-  //     console.log("NewWave", from, timestamp, message);
-  //     setWaves((prevState) => [
-  //       ...prevState,
-  //       {
-  //         address: from,
-  //         timestamp: new Date(timestamp * 1000),
-  //         message: message,
-  //       },
-  //     ]);
-  //   };
-
-  //   if (window.ethereum) {
-  //     const provider = new ethers.providers.Web3Provider(window.ethereum);
-  //     const signer = provider.getSigner();
-
-  //     wavePortalContract = new ethers.Contract(
-  //       contractAddress,
-  //       contractABI,
-  //       signer
-  //     );
-  //     wavePortalContract.on("NewWave", onNewWave);
-  //   }
-
-  //   return () => {
-  //     if (wavePortalContract) {
-  //       wavePortalContract.off("NewWave", onNewWave);
-  //     }
-  //   };
-  // }, []);
+    return () => {
+      if (wavePortalContract) {
+        wavePortalContract.off('NewWave', updateAllWaves)
+      }
+    }
+  }, []);
 
   return (
     <Box textAlign="center" fontSize="xl">

@@ -5,7 +5,28 @@ import abi from "../utils/WavePortal.json";
 const contractAddress = "0xB1D4844C51DE0c13D12Ce9CeA6825deFffBbDc9D";
 const contractABI = abi.abi;
 
-// Helper function to initiate a wave. Returns the new total number of waves
+// Helper to return the wavePortalContract. Used to setup 'webhooks'
+const getWaveContract = () => {
+  let wavePortalContract = null
+  try {
+    const { ethereum } = window;
+
+    if (ethereum) {
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+      wavePortalContract = new ethers.Contract(
+        contractAddress,
+        contractABI,
+        signer
+      );
+    } else {
+      console.log("no etherium object lol");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  return wavePortalContract
+};
 
 // Input: (string) message of the wave
 // Output: if the wave succeeded
@@ -80,4 +101,4 @@ const getAllWaves = async (): Promise<any> => {
   return allWaves;
 };
 
-export { wave, getAllWaves };
+export { getWaveContract, wave, getAllWaves };
