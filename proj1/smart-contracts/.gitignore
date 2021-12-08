@@ -33,5 +33,5 @@ typechain
 # Hardhat files
 cache
 artifacts
-
+.env
 hardhat.config.ts
