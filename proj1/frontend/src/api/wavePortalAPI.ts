@@ -5,6 +5,8 @@ import abi from "../utils/WavePortal.json";
 const contractAddress = "0xB1D4844C51DE0c13D12Ce9CeA6825deFffBbDc9D";
 const contractABI = abi.abi;
 
+// What if we did some class shit and kept track of ethereum as a class var...?
+
 // Helper to return the wavePortalContract. Used to setup 'webhooks'
 const getWaveContract = () => {
   let wavePortalContract = null
@@ -91,7 +93,6 @@ const getAllWaves = async (): Promise<any> => {
         });
       });
       allWaves = wavesCleaned;
-      console.log(`allWaves ${allWaves}`);
     } else {
       console.log("no etherium object lol");
     }

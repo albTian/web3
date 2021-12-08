@@ -1,5 +1,6 @@
 import { Box, Button, Grid, Input, useToast, VStack } from "@chakra-ui/react";
 import { ethers } from "ethers";
+import Head from 'next/head';
 import React, { BaseSyntheticEvent, useEffect, useState } from "react";
 import { checkWalletConnection, connectWallet } from "../api/walletAPI";
 import { getAllWaves, getWaveContract, wave } from "../api/wavePortalAPI";
@@ -21,7 +22,7 @@ const Index = () => {
     const account = await connectWallet();
     if (account) {
       setCurrentAccount(account);
-      updateAllWaves()
+      updateAllWaves();
     } else {
       toast({
         title: "Make sure you have metamask!",
@@ -36,7 +37,6 @@ const Index = () => {
   const updateAllWaves = async () => {
     const newWaves = await getAllWaves();
     if (newWaves) {
-      console.log(newWaves);
       setWaves(newWaves);
     } else {
       console.log(`waves is empty or some shit went wrong`);
@@ -88,18 +88,21 @@ const Index = () => {
   useEffect(() => {
     const wavePortalContract = getWaveContract();
     if (wavePortalContract) {
-      wavePortalContract.on('NewWave', updateAllWaves)
+      wavePortalContract.on("NewWave", updateAllWaves);
     }
 
     return () => {
       if (wavePortalContract) {
-        wavePortalContract.off('NewWave', updateAllWaves)
+        wavePortalContract.off("NewWave", updateAllWaves);
       }
-    }
+    };
   }, []);
 
   return (
     <Box textAlign="center" fontSize="xl">
+      <Head>
+        <title>web3 playground</title>
+      </Head>
       <Grid minH="100vh" p={3}>
         <ColorModeSwitcher justifySelf="flex-end" />
         {/* The entire center stack */}

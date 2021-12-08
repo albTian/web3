@@ -8,7 +8,6 @@ import {
   Text,
   VStack,
   Link,
-  Box,
   useColorModeValue,
 } from "@chakra-ui/react";
 import Image from "next/image";
@@ -20,7 +19,7 @@ import theme from "../theme";
 
 const title = "web3 playground";
 const description =
-  "A hello world type project for smart contracts, etherium and metamask integration. Send me a wave for a chance at some ETH!";
+  "A hello world type project for smart contracts, etherium and metamask integration. Send me a wave on the Rinkeby testnet for a chance at some ETH!";
 
 const imageMap: HoverEmojiProps[] = [
   {
@@ -91,8 +90,6 @@ const Hero = () => (
   >
     <HStack justifyContent="space-between" w={"100%"}>
       {imageMap.map((hoverProps) => (
-        // <Image src={img} key={img.src} alt={img.src} />
-        // <HoverEmoji emoji={img}/>
         <HoverEmoji
           emoji={hoverProps.emoji}
           title={hoverProps.title}

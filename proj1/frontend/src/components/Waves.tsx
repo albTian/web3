@@ -45,37 +45,46 @@ const Wave = ({
 const Waves = ({ waves }: { waves: any[] }) => {
   const color = useColorModeValue(theme.colors.purple, theme.colors.pink);
   const isLarge = useBreakpointValue({ base: false, sm: true });
+  const isEmpty = waves.length == 0;
 
   return (
-    <VStack fontSize={"sm"} textAlign={"left"}>
-      <HStack
-        justifyContent="space-between"
-        w={"100%"}
-        borderBottom={`1px solid ${color}`}
-        color={color}
-      >
-        <Text
-          w={isLarge ? "40%" : "100%"}
-          textAlign={isLarge ? "left" : "center"}
-        >
-          {`✨ message${isLarge ? "" : "s"}`}
-        </Text>
-        {isLarge && (
-          <>
-            <Text>⌛ timestamp</Text>
-            <Text>🏠 address</Text>
-          </>
-        )}
-      </HStack>
-      {waves.slice().reverse().map((wave: any) => (
-        <Wave
-          message={wave.message}
-          address={wave.address}
-          key={wave.timestamp}
-          timestamp={new Date(wave.timestamp)}
-          isLarge={isLarge || false}
-        />
-      ))}
+    <VStack fontSize={"sm"} textAlign={"left"} color={color}>
+      {!isEmpty ? (
+        <>
+          <HStack
+            justifyContent="space-between"
+            w={"100%"}
+            borderBottom={`1px solid ${color}`}
+          >
+            <Text
+              w={isLarge ? "40%" : "100%"}
+              textAlign={isLarge ? "left" : "center"}
+            >
+              {`✨ message${isLarge ? "" : "s"}`}
+            </Text>
+            {isLarge && (
+              <>
+                <Text>⌛ timestamp</Text>
+                <Text>🏠 address</Text>
+              </>
+            )}
+          </HStack>
+          {waves
+            .slice()
+            .reverse()
+            .map((wave: any) => (
+              <Wave
+                message={wave.message}
+                address={wave.address}
+                key={wave.timestamp}
+                timestamp={new Date(wave.timestamp)}
+                isLarge={isLarge || false}
+              />
+            ))}
+        </>
+      ) : (
+        <Text>no waves yet!</Text>
+      )}
     </VStack>
   );
 };
