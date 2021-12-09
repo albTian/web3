@@ -15,7 +15,7 @@ export default class Document extends NextDocument {
           />
           <meta name="keywords" content="web3, ethereum, buildspace" />
           <link rel="shortcut icon" href="/static/meta/favicon.png" />
-          <meta property="og:image" content="/static/meta/favicon.png" />
+          <meta property="og:image" content="/static/meta/ogImage.png" />
           <meta property="og:title" content="web3 playground" />
           <meta property="og:type" content="website" />
         </Head>
