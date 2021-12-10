@@ -1,8 +1,7 @@
 import { Box, Button, Grid, Input, useToast, VStack } from "@chakra-ui/react";
-import { ethers } from "ethers";
 import Head from 'next/head';
 import React, { BaseSyntheticEvent, useEffect, useState } from "react";
-import { checkWalletConnection, connectWallet } from "../api/walletAPI";
+import { checkMetaConnection, connectMeta } from "../api/walletAPI";
 import { getAllWaves, getWaveContract, wave } from "../api/wavePortalAPI";
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
 import Hero from "../components/Hero";
@@ -19,7 +18,7 @@ const Index = () => {
   const [isMining, setIsMining] = useState(false);
 
   const onConnectWallet = async () => {
-    const account = await connectWallet();
+    const account = await connectMeta();
     if (account) {
       setCurrentAccount(account);
       updateAllWaves();
@@ -70,14 +69,18 @@ const Index = () => {
   useEffect(() => {
     // Funky async magic to run async functions inside a non async signature and use the awaited value
     // Can use anything that needs account on startup in the snippet below
-    (async () => {
-      const account = await checkWalletConnection();
+    
+    const onLoad = async () => {
+      const account = await checkMetaConnection();
       if (account && account !== currentAccount) {
         setCurrentAccount(account);
       }
-    })();
+    }
 
     updateAllWaves();
+    // Phantom wallet suggests running it AFTER window loads
+    window.addEventListener("load", onLoad);
+    return () => window.removeEventListener("load", onLoad);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

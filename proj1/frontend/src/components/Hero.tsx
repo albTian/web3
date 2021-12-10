@@ -26,7 +26,7 @@ const imageMap: HoverEmojiProps[] = [
     emoji: diamond,
     title: "coming soon...",
     description: "the next project, yet to be built...",
-    href: "https://bit.ly/ai-ref",
+    href: "/nft",
   },
   {
     emoji: me,

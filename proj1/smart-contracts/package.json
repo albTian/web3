@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "runWave": "npx hardhat run scripts/runWave.ts",
+    "deployWave": "npx hardhat run scripts/deployWave.ts --network rinkeby",
+    "runNFT": "npx hardhat run scripts/runNFT.ts",
+    "deployNFT": "npx hardhat run scripts/deployNFT.ts --network rinkeby"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +24,7 @@
     "typescript": "^4.5.2"
   },
   "dependencies": {
+    "@openzeppelin/contracts": "^4.4.0",
     "dotenv": "^10.0.0"
   }
 }

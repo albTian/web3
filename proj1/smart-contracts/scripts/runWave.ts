@@ -1,5 +1,4 @@
 // const hre = require("hardhat")
-import { HardhatEthersHelpers } from "@nomiclabs/hardhat-ethers/types";
 import hre from "hardhat";
 
 const main = async () => {
