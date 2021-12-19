@@ -97,6 +97,7 @@ const getAllWaves = async (): Promise<any> => {
       console.log("no etherium object lol");
     }
   } catch (error) {
+    console.log("HERE");
     console.log(error);
   }
   return allWaves;

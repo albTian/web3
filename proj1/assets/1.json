@@ -1,0 +1,19 @@
+{
+  "name": "JOE GOLDBERG",
+  "symbol": "",
+  "image": "1.png",
+  "properties": {
+    "files": [
+      {
+        "uri": "1.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "6f2B6ETB6t8kARoa9TMqH8UFUfkHsD5gDCD3YjhQ4EKA",
+        "share": 100
+      }
+    ]
+  }
+}

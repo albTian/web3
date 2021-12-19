@@ -1,0 +1,19 @@
+{
+  "name": "SPONGEBOB SQUAREPANTS (AKATSUKI)",
+  "symbol": "",
+  "image": "2.png",
+  "properties": {
+    "files": [
+      {
+        "uri": "2.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "6f2B6ETB6t8kARoa9TMqH8UFUfkHsD5gDCD3YjhQ4EKA",
+        "share": 100
+      }
+    ]
+  }
+}

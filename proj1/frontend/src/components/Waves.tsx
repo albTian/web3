@@ -83,7 +83,7 @@ const Waves = ({ waves }: { waves: any[] }) => {
             ))}
         </>
       ) : (
-        <Text>no waves yet!</Text>
+        <Text>no waves yet! make sure you're on the rinkeby testnet</Text>
       )}
     </VStack>
   );
