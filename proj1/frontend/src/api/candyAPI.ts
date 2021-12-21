@@ -14,13 +14,12 @@ import {
   TOKEN_METADATA_PROGRAM_ID,
   SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID,
 } from "./helpers";
+import { MetadataData } from "@metaplex/js/lib/programs/metadata";
 
 const {
   metadata: { Metadata, MetadataProgram },
 } = programs;
-const config = new web3.PublicKey(
-  process.env.REACT_APP_CANDY_MACHINE_CONFIG || ""
-);
+
 const { SystemProgram } = web3;
 const opts: ConfirmOptions = {
   preflightCommitment: "processed",
@@ -204,6 +203,8 @@ const createAssociatedTokenAccountInstruction = (
 const mintToken = async (walletAddress: Keypair) => {
   try {
     if (!process.env.REACT_APP_SOLANA_RPC_HOST) {
+      console.log("THIS IS FALSE??");
+      
       return;
     }
     const mint = web3.Keypair.generate();
@@ -215,6 +216,12 @@ const mintToken = async (walletAddress: Keypair) => {
     const rent = await connection.getMinimumBalanceForRentExemption(
       MintLayout.span
     );
+
+    const config = new web3.PublicKey(
+      process.env.REACT_APP_CANDY_MACHINE_CONFIG || ""
+    );
+    console.log("configSADFLAKSJD;FLA SDKFH");
+    console.log(config);
 
     const accounts = {
       config,
@@ -317,3 +324,27 @@ const mintToken = async (walletAddress: Keypair) => {
     console.warn(message);
   }
 };
+
+// TODO: Refactor to RETURN a new array of mints, not use setMints
+const getMints = async (mints: any, setMints: any) => {
+  const data = (await fetchHashTable(
+    process.env.REACT_APP_CANDY_MACHINE_ID || "",
+    true
+  )) as MetadataData[];
+
+  if (data && data.length !== 0) {
+    for (const mint of data) {
+      // Get URI
+      const response = await fetch(mint.data.uri);
+      const parse = await response.json();
+      console.log("Past Minted NFT", mint);
+
+      // Get image URI
+      if (!mints.find((mint: any) => mint === parse.image)) {
+        setMints((prevState: any) => [...prevState, parse.image]);
+      }
+    }
+  }
+};
+
+export { mintToken };

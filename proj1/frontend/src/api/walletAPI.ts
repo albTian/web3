@@ -1,3 +1,5 @@
+import { Keypair } from "@solana/web3.js";
+
 // Used to check if we have metamask installed. Returns
 const checkMetaConnection = async (): Promise<any> => {
   let account = null;
@@ -46,7 +48,8 @@ const connectMeta = async (): Promise<any> => {
 };
 
 // Check if we have an existing solana account. Passive request
-const checkSolanaConnection = async (): Promise<string> => {
+// TODO: GET RID OF ANY
+const checkSolanaConnection = async (): Promise<any> => {
   let address = "";
   try {
     const { solana } = window;
@@ -76,7 +79,8 @@ const checkSolanaConnection = async (): Promise<string> => {
 };
 
 // Connect to the wallet. Will make an active request and prompt the user
-const connectSolana = async (): Promise<string> => {
+// TODO: GET RID OF ANY
+const connectSolana = async (): Promise<any> => {
   let address = "";
   const { solana } = window;
 

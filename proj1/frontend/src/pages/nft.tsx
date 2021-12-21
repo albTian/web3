@@ -3,10 +3,13 @@ import React, { useEffect, useState } from "react";
 import { checkSolanaConnection, connectSolana } from "../api/walletAPI";
 import { Container } from "../components/Container";
 import CandyMachine from "../components/CandyMachine";
+import { mintToken } from "../api/candyAPI";
+import { Keypair } from "@solana/web3.js";
 
 const NFT = () => {
   // API specific
-  const [walletAddress, setWalletAddress] = useState<String>();
+  const [walletAddress, setWalletAddress] = useState<Keypair>();
+  const [mints, setMints] = useState([]);
 
   // Frontend specific
   const [isMining, setIsMining] = useState<boolean>(false);
@@ -28,6 +31,17 @@ const NFT = () => {
     }
   };
 
+  const handleMint = async () => {
+    if (walletAddress) {
+      console.log('walletAddress');
+      console.log(walletAddress);
+      
+      setIsMining(true)
+      await mintToken(walletAddress)
+      setIsMining(false)
+    }
+  }
+
   useEffect(() => {
     const onLoad = async () => {
       const address = await checkSolanaConnection();
@@ -43,15 +57,16 @@ const NFT = () => {
       <Text>GET YOUR NFTS HERE</Text>
       <Text>Cnady drop</Text>
       {walletAddress ? (
-        // <Button
-        //   width={"100%"}
-        //   type="submit"
-        //   isLoading={isMining}
-        //   loadingText={"mining ..."}
-        // >
-        //   ✨ mint NFT
-        // </Button>
-        <CandyMachine />
+        <>
+          <Button
+            width={"100%"}
+            onClick={handleMint}
+            isLoading={isMining}
+            loadingText={"mining ..."}
+          >
+            ✨ mint NFT
+          </Button>
+        </>
       ) : (
         <Button onClick={onConnectWallet}>👻 Connect Phantom</Button>
       )}
