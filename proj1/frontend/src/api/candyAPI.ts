@@ -218,9 +218,9 @@ const mintToken = async (walletAddress: Keypair) => {
 
     const accounts = {
       config,
-      candyMachine: process.env.REACT_APP_CANDY_MACHINE_ID,
+      candyMachine: process.env.REACT_APP_CANDY_MACHINE_ID || "",
       payer: walletAddress.publicKey,
-      wallet: process.env.REACT_APP_TREASURY_ADDRESS,
+      wallet: process.env.REACT_APP_TREASURY_ADDRESS || "",
       mint: mint.publicKey,
       metadata,
       masterEdition,
