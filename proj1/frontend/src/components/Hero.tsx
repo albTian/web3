@@ -27,12 +27,15 @@ const imageMap: HoverEmojiProps[] = [
     title: "coming soon...",
     description: "the next project, yet to be built...",
     href: "/nft",
+    external: false,
   },
   {
     emoji: me,
     title: "About me",
-    description: "I'm Albert, a junior at UC Berkeley diving into web3. With my spare time I love to tinker on projects (like this one) and lift weights. Thanks for stopping by!",
+    description:
+      "I'm Albert, a junior at UC Berkeley diving into web3. With my spare time I love to tinker on projects (like this one) and lift weights. Thanks for stopping by!",
     href: "https://atian.super.site/",
+    external: true,
   },
   {
     emoji: unicorn,
@@ -40,6 +43,7 @@ const imageMap: HoverEmojiProps[] = [
     description:
       "Huge shoutout to Buildspace and Farza for this project (and color scheme)! Check them out for some sick crypto development tutorials",
     href: "https://buildspace.so/",
+    external: true,
   },
 ];
 
@@ -48,9 +52,16 @@ interface HoverEmojiProps {
   title: string;
   description: string;
   href: string;
+  external: boolean;
 }
 
-const HoverEmoji = ({ emoji, title, description, href }: HoverEmojiProps) => {
+const HoverEmoji = ({
+  emoji,
+  title,
+  description,
+  href,
+  external,
+}: HoverEmojiProps) => {
   const sizing = ["75px", "100px", "120px"];
   const bgColor = useColorModeValue(theme.colors.purple, theme.colors.pink);
   const textColor = useColorModeValue("white", theme.colors.black);
@@ -58,15 +69,20 @@ const HoverEmoji = ({ emoji, title, description, href }: HoverEmojiProps) => {
   return (
     <Popover trigger="hover">
       <PopoverTrigger>
-        <Link href={href} target={"_blank"} w={sizing} h={sizing}>
-          <Image src={emoji} alt={title}/>
+        <Link
+          href={href}
+          target={external ? "_blank" : ""}
+          w={sizing}
+          h={sizing}
+        >
+          <Image src={emoji} alt={title} />
         </Link>
       </PopoverTrigger>
       <PopoverContent border="0px" bg="transparent">
         <Link
           href={href}
           rounded={"md"}
-          target={"_blank"}
+          target={external ? "_blank" : ""}
           bg={bgColor}
           transition=".2s"
           _hover={{ bg: "#441DA9", transition: ".2s" }}
@@ -96,6 +112,7 @@ const Hero = () => (
           description={hoverProps.description}
           href={hoverProps.href}
           key={hoverProps.title}
+          external={hoverProps.external}
         />
       ))}
     </HStack>

@@ -1,9 +1,9 @@
-import { Box, Button, Grid, Input, useToast, VStack } from "@chakra-ui/react";
-import Head from 'next/head';
+import { Button, Input, useToast } from "@chakra-ui/react";
+import Head from "next/head";
 import React, { BaseSyntheticEvent, useEffect, useState } from "react";
 import { checkMetaConnection, connectMeta } from "../api/walletAPI";
 import { getAllWaves, getWaveContract, wave } from "../api/wavePortalAPI";
-import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
+import { Container } from "../components/Container";
 import Hero from "../components/Hero";
 import Waves from "../components/Waves";
 
@@ -67,21 +67,16 @@ const Index = () => {
 
   // Run on load
   useEffect(() => {
-    // Funky async magic to run async functions inside a non async signature and use the awaited value
-    // Can use anything that needs account on startup in the snippet below
-    
+    // Can use anything that needs account on startup in onLoad
     const onLoad = async () => {
       const account = await checkMetaConnection();
       if (account && account !== currentAccount) {
         setCurrentAccount(account);
+        updateAllWaves();
       }
-    }
+    };
 
-    updateAllWaves();
-    // Phantom wallet suggests running it AFTER window loads
-    window.addEventListener("load", onLoad);
-    return () => window.removeEventListener("load", onLoad);
-
+    onLoad();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -102,47 +97,33 @@ const Index = () => {
   }, []);
 
   return (
-    <Box textAlign="center" fontSize="xl">
+    <Container>
       <Head>
         <title>web3 playground</title>
       </Head>
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        {/* The entire center stack */}
-        <VStack
-          spacing={8}
-          mt={"15vh"}
-          mb={"10vh"}
-          mx={"auto"}
-          width={[325, 450, 600]}
-          as={"form"}
-          onSubmit={submitHandler}
-        >
-          <Hero />
-          {/* Conditionally render connect button */}
-          {currentAccount ? (
-            <>
-              <Input
-                value={inputMessage}
-                onChange={handleChange}
-                placeholder={"Send me a message to show it below"}
-              />
-              <Button
-                width={"100%"}
-                type="submit"
-                isLoading={isMining}
-                loadingText={"mining ..."}
-              >
-                👋 wave at me!
-              </Button>
-              <Waves waves={waves} />
-            </>
-          ) : (
-            <Button onClick={onConnectWallet}>Connect Metamask</Button>
-          )}
-        </VStack>
-      </Grid>
-    </Box>
+      <Hero />
+      {/* Conditionally render connect button */}
+      {currentAccount ? (
+        <>
+          <Input
+            value={inputMessage}
+            onChange={handleChange}
+            placeholder={"Send me a message to show it below"}
+          />
+          <Button
+            width={"100%"}
+            type="submit"
+            isLoading={isMining}
+            loadingText={"mining ..."}
+          >
+            👋 wave at me!
+          </Button>
+          <Waves waves={waves} />
+        </>
+      ) : (
+        <Button onClick={onConnectWallet}>Connect Metamask</Button>
+      )}
+    </Container>
   );
 };
 
