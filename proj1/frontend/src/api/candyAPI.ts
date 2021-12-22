@@ -31,10 +31,12 @@ const MAX_SYMBOL_LENGTH = 10;
 const MAX_CREATOR_LEN = 32 + 1 + 1;
 
 const fetchHashTable = async (hash: string, metadataEnabled: boolean) => {
-  if (!process.env.REACT_APP_SOLANA_RPC_HOST) {
+  if (!process.env.NEXT_PUBLIC_SOLANA_RPC_HOST) {
     return;
   }
-  const connection = new web3.Connection(process.env.REACT_APP_SOLANA_RPC_HOST);
+  const connection = new web3.Connection(
+    process.env.NEXT_PUBLIC_SOLANA_RPC_HOST
+  );
 
   const metadataAccounts = await MetadataProgram.getProgramAccounts(
     connection,
@@ -80,10 +82,10 @@ const fetchHashTable = async (hash: string, metadataEnabled: boolean) => {
 };
 
 const getProvider = () => {
-  if (!process.env.REACT_APP_SOLANA_RPC_HOST) {
+  if (!process.env.NEXT_PUBLIC_SOLANA_RPC_HOST) {
     return;
   }
-  const rpcHost = process.env.REACT_APP_SOLANA_RPC_HOST;
+  const rpcHost = process.env.NEXT_PUBLIC_SOLANA_RPC_HOST;
   // Create a new connection object
   const connection = new Connection(rpcHost);
 
@@ -99,7 +101,7 @@ const getCandyMachineState = async () => {
   // Get metadata about your deployed candy machine program
   const idl = await Program.fetchIdl(candyMachineProgram, provider);
 
-  if (!idl || !process.env.REACT_APP_CANDY_MACHINE_ID) {
+  if (!idl || !process.env.NEXT_PUBLIC_CANDY_MACHINE_ID) {
     return;
   }
 
@@ -108,7 +110,7 @@ const getCandyMachineState = async () => {
 
   // Fetch the metadata from your candy machine
   const candyMachine = await program.account.candyMachine.fetch(
-    process.env.REACT_APP_CANDY_MACHINE_ID
+    process.env.NEXT_PUBLIC_CANDY_MACHINE_ID
   );
 
   // Parse out all our metadata and log it out
@@ -202,32 +204,35 @@ const createAssociatedTokenAccountInstruction = (
 
 const mintToken = async (walletAddress: Keypair) => {
   try {
-    if (!process.env.REACT_APP_SOLANA_RPC_HOST) {
-      console.log("THIS IS FALSE??");
-      
+    if (
+      !process.env.NEXT_PUBLIC_SOLANA_RPC_HOST ||
+      !process.env.NEXT_PUBLIC_CANDY_MACHINE_CONFIG
+    ) {
+      console.log("PROCESS.ENV IS NULL")
       return;
     }
+    console.log("process.env.NEXT_PUBLIC_SOLANA_RPC_HOST")
+    console.log(process.env.NEXT_PUBLIC_SOLANA_RPC_HOST)
     const mint = web3.Keypair.generate();
     const token = await getTokenWallet(walletAddress.publicKey, mint.publicKey);
     const metadata = await getMetadata(mint.publicKey);
     const masterEdition = await getMasterEdition(mint.publicKey);
-    const rpcHost = process.env.REACT_APP_SOLANA_RPC_HOST;
+    const rpcHost = process.env.NEXT_PUBLIC_SOLANA_RPC_HOST;
     const connection = new Connection(rpcHost);
     const rent = await connection.getMinimumBalanceForRentExemption(
       MintLayout.span
     );
 
     const config = new web3.PublicKey(
-      process.env.REACT_APP_CANDY_MACHINE_CONFIG || ""
+      process.env.NEXT_PUBLIC_CANDY_MACHINE_CONFIG
     );
-    console.log("configSADFLAKSJD;FLA SDKFH");
-    console.log(config);
+
 
     const accounts = {
       config,
-      candyMachine: process.env.REACT_APP_CANDY_MACHINE_ID || "",
+      candyMachine: process.env.NEXT_PUBLIC_CANDY_MACHINE_ID || "",
       payer: walletAddress.publicKey,
-      wallet: process.env.REACT_APP_TREASURY_ADDRESS || "",
+      wallet: process.env.NEXT_PUBLIC_TREASURY_ADDRESS || "",
       mint: mint.publicKey,
       metadata,
       masterEdition,
@@ -278,6 +283,7 @@ const mintToken = async (walletAddress: Keypair) => {
       return;
     }
     const program = new Program(idl, candyMachineProgram, provider);
+    console.log("dogwater");
 
     // The magic line
     const txn = await program.rpc.mintNft({
@@ -328,7 +334,7 @@ const mintToken = async (walletAddress: Keypair) => {
 // TODO: Refactor to RETURN a new array of mints, not use setMints
 const getMints = async (mints: any, setMints: any) => {
   const data = (await fetchHashTable(
-    process.env.REACT_APP_CANDY_MACHINE_ID || "",
+    process.env.NEXT_PUBLIC_CANDY_MACHINE_ID || "",
     true
   )) as MetadataData[];
 
@@ -347,4 +353,11 @@ const getMints = async (mints: any, setMints: any) => {
   }
 };
 
-export { mintToken };
+// const getData = async () => {
+//   const data = (await fetchHashTable(
+//     process.env.NEXT_PUBLIC_CANDY_MACHINE_ID || "",
+//     true
+//   )) as MetadataData[];
+// };
+
+export { mintToken, getMints };

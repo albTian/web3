@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { checkSolanaConnection, connectSolana } from "../api/walletAPI";
 import { Container } from "../components/Container";
 import CandyMachine from "../components/CandyMachine";
-import { mintToken } from "../api/candyAPI";
+import { mintToken, getMints } from "../api/candyAPI";
 import { Keypair } from "@solana/web3.js";
 
 const NFT = () => {
@@ -33,19 +33,17 @@ const NFT = () => {
 
   const handleMint = async () => {
     if (walletAddress) {
-      console.log('walletAddress');
-      console.log(walletAddress);
-      
-      setIsMining(true)
-      await mintToken(walletAddress)
-      setIsMining(false)
+      setIsMining(true);
+      await mintToken(walletAddress);
+      setIsMining(false);
     }
-  }
+  };
 
   useEffect(() => {
     const onLoad = async () => {
       const address = await checkSolanaConnection();
       setWalletAddress(address);
+      getMints(mints, setMints);
     };
 
     window.addEventListener("load", onLoad);
@@ -66,6 +64,9 @@ const NFT = () => {
           >
             ✨ mint NFT
           </Button>
+          {mints.map((mint, index) => (
+            <div key={index}>dogwater</div>
+          ))}
         </>
       ) : (
         <Button onClick={onConnectWallet}>👻 Connect Phantom</Button>
