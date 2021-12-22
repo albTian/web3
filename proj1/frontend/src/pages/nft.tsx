@@ -1,4 +1,4 @@
-import { Button, Text, useToast } from "@chakra-ui/react";
+import { Button, Text, useToast, Image } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { checkSolanaConnection, connectSolana } from "../api/walletAPI";
 import { Container } from "../components/Container";
@@ -13,6 +13,7 @@ const NFT = () => {
 
   // Frontend specific
   const [isMining, setIsMining] = useState<boolean>(false);
+  const [isLoadingMints, setIsLoadingMints] = useState<boolean>(true);
   const toast = useToast();
 
   const onConnectWallet = async () => {
@@ -34,7 +35,16 @@ const NFT = () => {
   const handleMint = async () => {
     if (walletAddress) {
       setIsMining(true);
-      await mintToken(walletAddress);
+      const response = await mintToken(walletAddress);
+      if (response !== 0) {
+        toast({
+          title: "Minting failed...",
+          description: "Something went wrong while minting",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
       setIsMining(false);
     }
   };
@@ -43,7 +53,9 @@ const NFT = () => {
     const onLoad = async () => {
       const address = await checkSolanaConnection();
       setWalletAddress(address);
-      getMints(mints, setMints);
+      setIsLoadingMints(true);
+      await getMints(mints, setMints);
+      setIsLoadingMints(false);
     };
 
     window.addEventListener("load", onLoad);
@@ -64,9 +76,19 @@ const NFT = () => {
           >
             ✨ mint NFT
           </Button>
-          {mints.map((mint, index) => (
-            <div key={index}>dogwater</div>
-          ))}
+          {isLoadingMints ? (
+            <Button
+              isLoading={isLoadingMints}
+              loadingText="loading previous mints..."
+            ></Button>
+          ) : (
+            <>
+              <Text>Already minted</Text>
+              {mints.map((mint) => (
+                <Image key={mint} src={mint} alt={`Minted NFT ${mint}`} />
+              ))}
+            </>
+          )}
         </>
       ) : (
         <Button onClick={onConnectWallet}>👻 Connect Phantom</Button>

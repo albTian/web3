@@ -202,14 +202,18 @@ const createAssociatedTokenAccountInstruction = (
   });
 };
 
+// Returns an error code
+// 0: success
+// 1: error
 const mintToken = async (walletAddress: Keypair) => {
+  let response: number = 1
   try {
     if (
       !process.env.NEXT_PUBLIC_SOLANA_RPC_HOST ||
       !process.env.NEXT_PUBLIC_CANDY_MACHINE_CONFIG
     ) {
       console.log("PROCESS.ENV IS NULL")
-      return;
+      return 1;
     }
     console.log("process.env.NEXT_PUBLIC_SOLANA_RPC_HOST")
     console.log(process.env.NEXT_PUBLIC_SOLANA_RPC_HOST)
@@ -280,7 +284,7 @@ const mintToken = async (walletAddress: Keypair) => {
     const provider = getProvider();
     const idl = await Program.fetchIdl(candyMachineProgram, provider);
     if (!idl) {
-      return;
+      return 1;
     }
     const program = new Program(idl, candyMachineProgram, provider);
     console.log("dogwater");
@@ -309,7 +313,9 @@ const mintToken = async (walletAddress: Keypair) => {
       },
       { commitment: "processed" }
     );
+    response = 0
   } catch (error: any) {
+    response = 1
     let message = error.msg || "Minting failed! Please try again!";
 
     if (!error.msg) {
@@ -329,6 +335,7 @@ const mintToken = async (walletAddress: Keypair) => {
 
     console.warn(message);
   }
+  return response
 };
 
 // TODO: Refactor to RETURN a new array of mints, not use setMints
