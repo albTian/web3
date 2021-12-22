@@ -206,17 +206,17 @@ const createAssociatedTokenAccountInstruction = (
 // 0: success
 // 1: error
 const mintToken = async (walletAddress: Keypair) => {
-  let response: number = 1
+  let response: number = 1;
   try {
     if (
       !process.env.NEXT_PUBLIC_SOLANA_RPC_HOST ||
-      !process.env.NEXT_PUBLIC_CANDY_MACHINE_CONFIG
+      !process.env.NEXT_PUBLIC_CANDY_MACHINE_CONFIG ||
+      !process.env.NEXT_PUBLIC_CANDY_MACHINE_ID ||
+      !process.env.NEXT_PUBLIC_TREASURY_ADDRESS
     ) {
-      console.log("PROCESS.ENV IS NULL")
+      console.log("PROCESS.ENV IS NULL");
       return 1;
     }
-    console.log("process.env.NEXT_PUBLIC_SOLANA_RPC_HOST")
-    console.log(process.env.NEXT_PUBLIC_SOLANA_RPC_HOST)
     const mint = web3.Keypair.generate();
     const token = await getTokenWallet(walletAddress.publicKey, mint.publicKey);
     const metadata = await getMetadata(mint.publicKey);
@@ -231,12 +231,11 @@ const mintToken = async (walletAddress: Keypair) => {
       process.env.NEXT_PUBLIC_CANDY_MACHINE_CONFIG
     );
 
-
     const accounts = {
       config,
-      candyMachine: process.env.NEXT_PUBLIC_CANDY_MACHINE_ID || "",
+      candyMachine: process.env.NEXT_PUBLIC_CANDY_MACHINE_ID,
       payer: walletAddress.publicKey,
-      wallet: process.env.NEXT_PUBLIC_TREASURY_ADDRESS || "",
+      wallet: process.env.NEXT_PUBLIC_TREASURY_ADDRESS,
       mint: mint.publicKey,
       metadata,
       masterEdition,
@@ -313,9 +312,9 @@ const mintToken = async (walletAddress: Keypair) => {
       },
       { commitment: "processed" }
     );
-    response = 0
+    response = 0;
   } catch (error: any) {
-    response = 1
+    response = 1;
     let message = error.msg || "Minting failed! Please try again!";
 
     if (!error.msg) {
@@ -335,7 +334,7 @@ const mintToken = async (walletAddress: Keypair) => {
 
     console.warn(message);
   }
-  return response
+  return response;
 };
 
 // TODO: Refactor to RETURN a new array of mints, not use setMints
