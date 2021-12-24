@@ -31,8 +31,9 @@ const getWaveContract = () => {
 };
 
 // Input: (string) message of the wave
-// Output: if the wave succeeded
-const wave = async (_message: string): Promise<boolean> => {
+// Output: error message
+const wave = async (_message: string): Promise<string> => {
+  let response = ""
   try {
     const { ethereum } = window;
 
@@ -54,15 +55,15 @@ const wave = async (_message: string): Promise<boolean> => {
 
       await waveTxn.wait();
       console.log("Mined -- ", waveTxn.hash);
-      return true;
     } else {
       console.log("no etherium object lol");
-      return false;
+      response = "no etherium object found, make sure you have metamask installed"
     }
   } catch (error) {
     console.log(error);
-    return false;
+    response = "You may only send 1 wave per minute to prevent spamming";
   }
+  return response;
 };
 
 const getAllWaves = async (): Promise<any> => {

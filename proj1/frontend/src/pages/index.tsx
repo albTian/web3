@@ -44,11 +44,11 @@ const Index = () => {
 
   const onWave = async (_message: string) => {
     setIsMining(true);
-    const waveSuccess = await wave(_message);
-    if (!waveSuccess) {
+    const response = await wave(_message);
+    if (response) {
       toast({
         title: "Something went wrong...",
-        description: "You may only send 1 wave per minute to prevent spamming",
+        description: response,
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -59,12 +59,7 @@ const Index = () => {
   };
 
   const handleChange = (event: any) => setInputMessage(event.target.value);
-
-  const submitHandler = (event: BaseSyntheticEvent) => {
-    event.preventDefault();
-    onWave(inputMessage);
-  };
-
+  
   // Run on load
   useEffect(() => {
     // Can use anything that needs account on startup in onLoad
@@ -115,6 +110,7 @@ const Index = () => {
             type="submit"
             isLoading={isMining}
             loadingText={"mining ..."}
+            onClick={() => onWave(inputMessage)}
           >
             👋 wave at me!
           </Button>
