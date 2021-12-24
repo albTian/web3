@@ -1,20 +1,16 @@
-import React, { useEffect, useState } from "react";
+import { programs } from "@metaplex/js";
+import { MetadataData } from "@metaplex/js/lib/programs/metadata";
+import { Program, Provider, web3 } from "@project-serum/anchor";
+import { MintLayout, Token, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import {
-  AccountMeta,
   ConfirmOptions,
   Connection,
   Keypair,
-  PublicKey,
+  PublicKey
 } from "@solana/web3.js";
-import { Program, Provider, web3 } from "@project-serum/anchor";
-import { MintLayout, TOKEN_PROGRAM_ID, Token } from "@solana/spl-token";
-import { programs } from "@metaplex/js";
 import {
-  candyMachineProgram,
-  TOKEN_METADATA_PROGRAM_ID,
-  SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID,
+  candyMachineProgram, SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID, TOKEN_METADATA_PROGRAM_ID
 } from "./helpers";
-import { MetadataData } from "@metaplex/js/lib/programs/metadata";
 
 const {
   metadata: { Metadata, MetadataProgram },
@@ -222,9 +218,13 @@ const mintToken = async (walletAddress: Keypair) => {
       console.log("PROCESS.ENV IS NULL");
       return 1;
     }
+    
+    const publicKey = walletAddress.publicKey
     console.log("minting token...");
+    console.log('publicKey');
+    console.log(publicKey);
     const mint = web3.Keypair.generate();
-    const token = await getTokenWallet(walletAddress.publicKey, mint.publicKey);
+    const token = await getTokenWallet(publicKey, mint.publicKey);
     const metadata = await getMetadata(mint.publicKey);
     const masterEdition = await getMasterEdition(mint.publicKey);
     const rpcHost = process.env.NEXT_PUBLIC_SOLANA_RPC_HOST;
@@ -236,13 +236,13 @@ const mintToken = async (walletAddress: Keypair) => {
     const accounts = {
       config,
       candyMachine: process.env.NEXT_PUBLIC_CANDY_MACHINE_ID,
-      payer: walletAddress.publicKey,
+      payer: publicKey,
       wallet: process.env.NEXT_PUBLIC_TREASURY_ADDRESS,
       mint: mint.publicKey,
       metadata,
       masterEdition,
-      mintAuthority: walletAddress.publicKey,
-      updateAuthority: walletAddress.publicKey,
+      mintAuthority: publicKey,
+      updateAuthority: publicKey,
       tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
       tokenProgram: TOKEN_PROGRAM_ID,
       systemProgram: SystemProgram.programId,
@@ -253,7 +253,7 @@ const mintToken = async (walletAddress: Keypair) => {
     const signers = [mint];
     const instructions = [
       web3.SystemProgram.createAccount({
-        fromPubkey: walletAddress.publicKey,
+        fromPubkey: publicKey,
         newAccountPubkey: mint.publicKey,
         space: MintLayout.span,
         lamports: rent,
@@ -263,20 +263,20 @@ const mintToken = async (walletAddress: Keypair) => {
         TOKEN_PROGRAM_ID,
         mint.publicKey,
         0,
-        walletAddress.publicKey,
-        walletAddress.publicKey
+        publicKey,
+        publicKey
       ),
       createAssociatedTokenAccountInstruction(
         token,
-        walletAddress.publicKey,
-        walletAddress.publicKey,
+        publicKey,
+        publicKey,
         mint.publicKey
       ),
       Token.createMintToInstruction(
         TOKEN_PROGRAM_ID,
         mint.publicKey,
         token,
-        walletAddress.publicKey,
+        publicKey,
         [],
         1
       ),
@@ -289,15 +289,15 @@ const mintToken = async (walletAddress: Keypair) => {
     }
     const program = new Program(idl, candyMachineProgram, provider);
 
-    console.log(accounts)
-    console.log(signers)
-    console.log(instructions)
-
-    const txn = await program.rpc.mintNft({
+    const input = {
       accounts,
       signers,
       instructions,
-    });
+    };
+    console.log("input");
+    console.log(input);
+
+    const txn = await program.rpc.mintNft(input);
 
     console.log("txn:", txn);
 
@@ -353,7 +353,7 @@ const getMints = async (mints: any, setMints: any) => {
       // Get URI
       const response = await fetch(mint.data.uri);
       const parse = await response.json();
-      console.log("Past Minted NFT", mint);
+      // console.log("Past Minted NFT", mint);
 
       // Get image URI
       if (!mints.find((mint: any) => mint === parse.image)) {
