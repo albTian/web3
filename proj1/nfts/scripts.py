@@ -1,6 +1,5 @@
 import os
 
-
 # Run Metaplex's upload command via the CLI to upload the NFTs.
 # Run Metaplex's verify command via the CLI to make sure the NFTs were uploaded.
 # Run Metaplex's create_candy_machine command via the CLI to create a new candy machine.

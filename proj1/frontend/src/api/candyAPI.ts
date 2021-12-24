@@ -20,6 +20,10 @@ const {
   metadata: { Metadata, MetadataProgram },
 } = programs;
 
+const config = new web3.PublicKey(
+  process.env.NEXT_PUBLIC_CANDY_MACHINE_CONFIG || ""
+);
+
 const { SystemProgram } = web3;
 const opts: ConfirmOptions = {
   preflightCommitment: "processed",
@@ -208,6 +212,7 @@ const createAssociatedTokenAccountInstruction = (
 const mintToken = async (walletAddress: Keypair) => {
   let response: number = 1;
   try {
+    // Guard clause
     if (
       !process.env.NEXT_PUBLIC_SOLANA_RPC_HOST ||
       !process.env.NEXT_PUBLIC_CANDY_MACHINE_CONFIG ||
@@ -217,6 +222,7 @@ const mintToken = async (walletAddress: Keypair) => {
       console.log("PROCESS.ENV IS NULL");
       return 1;
     }
+    console.log("minting token...");
     const mint = web3.Keypair.generate();
     const token = await getTokenWallet(walletAddress.publicKey, mint.publicKey);
     const metadata = await getMetadata(mint.publicKey);
@@ -225,10 +231,6 @@ const mintToken = async (walletAddress: Keypair) => {
     const connection = new Connection(rpcHost);
     const rent = await connection.getMinimumBalanceForRentExemption(
       MintLayout.span
-    );
-
-    const config = new web3.PublicKey(
-      process.env.NEXT_PUBLIC_CANDY_MACHINE_CONFIG
     );
 
     const accounts = {
@@ -286,9 +288,11 @@ const mintToken = async (walletAddress: Keypair) => {
       return 1;
     }
     const program = new Program(idl, candyMachineProgram, provider);
-    console.log("dogwater");
 
-    // The magic line
+    console.log(accounts)
+    console.log(signers)
+    console.log(instructions)
+
     const txn = await program.rpc.mintNft({
       accounts,
       signers,

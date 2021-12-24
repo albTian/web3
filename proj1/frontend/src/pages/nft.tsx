@@ -35,7 +35,10 @@ const NFT = () => {
   const handleMint = async () => {
     if (walletAddress) {
       setIsMining(true);
-      const response = await mintToken(walletAddress);
+      // Try window.solana
+      mintToken(walletAddress);
+      // const response = await mintToken(walletAddress);
+      const response = 0
       if (response !== 0) {
         toast({
           title: "Minting failed...",
