@@ -1,12 +1,12 @@
 import {
-  Box, FlexProps, Grid,
+  Box, BoxProps, FlexProps, Grid,
   VStack
 } from "@chakra-ui/react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 
-export const Container = (props: FlexProps) => {
+export const Container = (props: BoxProps) => {
   return (
-    <Box textAlign="center" fontSize="xl">
+    <Box textAlign="center" fontSize="xl" {...props}>
       <Grid minH="100vh" p={3}>
         <ColorModeSwitcher justifySelf="flex-end" />
         {/* The entire center stack */}

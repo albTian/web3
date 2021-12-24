@@ -9,7 +9,6 @@ export default class Document extends NextDocument {
           <meta charSet="utf-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
           <meta name="author" content="Albert Tian" />
-          {/* <title>web3 playground</title> */}
           <meta
             name="description"
             content="a web3 playground for my personal projects from buildspace."

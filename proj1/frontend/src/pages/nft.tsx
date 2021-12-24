@@ -1,19 +1,18 @@
-import { Button, Text, useToast, Image } from "@chakra-ui/react";
+import { Box, Button, Heading, Text, useToast } from "@chakra-ui/react";
+import { Keypair } from "@solana/web3.js";
+import Head from "next/head";
+import NextLink from "next/Link";
 import React, { useEffect, useState } from "react";
 import { checkSolanaConnection, connectSolana } from "../api/walletAPI";
-import { Container } from "../components/Container";
 import CandyMachine from "../components/CandyMachine";
-import { mintToken, getMints } from "../api/candyAPI";
-import { Keypair } from "@solana/web3.js";
+import { Container } from "../components/Container";
+import theme from "../theme";
 
 const NFT = () => {
   // API specific
   const [walletAddress, setWalletAddress] = useState<Keypair>();
-  const [mints, setMints] = useState([]);
 
   // Frontend specific
-  const [isMining, setIsMining] = useState<boolean>(false);
-  const [isLoadingMints, setIsLoadingMints] = useState<boolean>(true);
   const toast = useToast();
 
   const onConnectWallet = async () => {
@@ -32,34 +31,14 @@ const NFT = () => {
     }
   };
 
-  const handleMint = async () => {
-    if (walletAddress) {
-      setIsMining(true);
-      // Try window.solana
-      mintToken(walletAddress);
-      // const response = await mintToken(walletAddress);
-      const response = 0
-      if (response !== 0) {
-        toast({
-          title: "Minting failed...",
-          description: "Something went wrong while minting",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-      }
-      setIsMining(false);
-    }
-  };
-
   useEffect(() => {
     const onLoad = async () => {
       const address = await checkSolanaConnection();
-      setWalletAddress(address);
-      setIsLoadingMints(true);
-      await getMints(mints, setMints);
-      setIsLoadingMints(false);
+      if (address) {
+        setWalletAddress(address);
+      }
     };
+    onLoad()
 
     window.addEventListener("load", onLoad);
     return () => window.removeEventListener("load", onLoad);
@@ -67,34 +46,23 @@ const NFT = () => {
 
   return (
     <Container>
-      <Text>GET YOUR NFTS HERE</Text>
-      <Text>Cnady drop</Text>
+      <Head>
+        <title>solana experiment</title>
+      </Head>
+      <Box bgGradient={theme.colors.gradient} bgClip="text">
+        <Heading fontSize={[30, 45, 60]}>{"solana experiment"}</Heading>
+        <Text>
+          mint a handwritten letter! Only supports Phantom wallet with Solana at the moment. This is a hello world type project for
+          solana/metaplex nft drops using the cady machine protocol.
+        </Text>
+        <Button variant={"link"} mt={8}>
+          <NextLink href={"/"}>go back</NextLink>
+        </Button>
+      </Box>
       {walletAddress ? (
-        <>
-          <Button
-            width={"100%"}
-            onClick={handleMint}
-            isLoading={isMining}
-            loadingText={"mining ..."}
-          >
-            ✨ mint NFT
-          </Button>
-          {isLoadingMints ? (
-            <Button
-              isLoading={isLoadingMints}
-              loadingText="loading previous mints..."
-            ></Button>
-          ) : (
-            <>
-              <Text>Already minted</Text>
-              {mints.map((mint) => (
-                <Image key={mint} src={mint} alt={`Minted NFT ${mint}`} />
-              ))}
-            </>
-          )}
-        </>
+        <CandyMachine walletAddress={walletAddress} />
       ) : (
-        <Button onClick={onConnectWallet}>👻 Connect Phantom</Button>
+        <Button onClick={onConnectWallet}>👻 Connect Phantom wallet</Button>
       )}
     </Container>
   );

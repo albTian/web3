@@ -6,10 +6,12 @@ import {
   ConfirmOptions,
   Connection,
   Keypair,
-  PublicKey
+  PublicKey,
 } from "@solana/web3.js";
 import {
-  candyMachineProgram, SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID, TOKEN_METADATA_PROGRAM_ID
+  candyMachineProgram,
+  SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID,
+  TOKEN_METADATA_PROGRAM_ID,
 } from "./helpers";
 
 const {
@@ -202,11 +204,11 @@ const createAssociatedTokenAccountInstruction = (
   });
 };
 
-// Returns an error code
-// 0: success
-// 1: error
-const mintToken = async (walletAddress: Keypair) => {
-  let response: number = 1;
+// Returns an error message
+// "": success
+// "error message": error
+const mintToken = async (walletAddress: Keypair): Promise<string> => {
+  let response: string = "";
   try {
     // Guard clause
     if (
@@ -216,13 +218,10 @@ const mintToken = async (walletAddress: Keypair) => {
       !process.env.NEXT_PUBLIC_TREASURY_ADDRESS
     ) {
       console.log("PROCESS.ENV IS NULL");
-      return 1;
+      return "process.env is null, check vercel config";
     }
-    
-    const publicKey = walletAddress.publicKey
-    console.log("minting token...");
-    console.log('publicKey');
-    console.log(publicKey);
+
+    const publicKey = walletAddress.publicKey;
     const mint = web3.Keypair.generate();
     const token = await getTokenWallet(publicKey, mint.publicKey);
     const metadata = await getMetadata(mint.publicKey);
@@ -285,7 +284,7 @@ const mintToken = async (walletAddress: Keypair) => {
     const provider = getProvider();
     const idl = await Program.fetchIdl(candyMachineProgram, provider);
     if (!idl) {
-      return 1;
+      return "fetching idl failed...";
     }
     const program = new Program(idl, candyMachineProgram, provider);
 
@@ -294,8 +293,6 @@ const mintToken = async (walletAddress: Keypair) => {
       signers,
       instructions,
     };
-    console.log("input");
-    console.log(input);
 
     const txn = await program.rpc.mintNft(input);
 
@@ -316,38 +313,42 @@ const mintToken = async (walletAddress: Keypair) => {
       },
       { commitment: "processed" }
     );
-    response = 0;
   } catch (error: any) {
-    response = 1;
-    let message = error.msg || "Minting failed! Please try again!";
+    response = error.msg || "Minting failed! Please try again!";
 
     if (!error.msg) {
       if (error.message.indexOf("0x138")) {
       } else if (error.message.indexOf("0x137")) {
-        message = `SOLD OUT!`;
+        response = `SOLD OUT!`;
       } else if (error.message.indexOf("0x135")) {
-        message = `Insufficient funds to mint. Please fund your wallet.`;
+        response = `Insufficient funds to mint. Please fund your wallet.`;
       }
     } else {
       if (error.code === 311) {
-        message = `SOLD OUT!`;
+        response = `SOLD OUT!`;
       } else if (error.code === 312) {
-        message = `Minting period hasn't started yet.`;
+        response = `Minting period hasn't started yet.`;
       }
     }
 
-    console.warn(message);
+    console.warn(response);
   }
   return response;
 };
 
 // TODO: Refactor to RETURN a new array of mints, not use setMints
 const getMints = async (mints: any, setMints: any) => {
+  if (!process.env.NEXT_PUBLIC_CANDY_MACHINE_ID) {
+    console.log("bruh");
+    return;
+  }
+  console.log("dog");
   const data = (await fetchHashTable(
-    process.env.NEXT_PUBLIC_CANDY_MACHINE_ID || "",
+    process.env.NEXT_PUBLIC_CANDY_MACHINE_ID,
     true
   )) as MetadataData[];
-
+  console.log(data);
+  
   if (data && data.length !== 0) {
     for (const mint of data) {
       // Get URI

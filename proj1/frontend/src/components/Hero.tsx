@@ -1,20 +1,17 @@
 import {
-  Heading,
-  HStack,
-  Popover,
+  Box, Heading,
+  HStack, Link, Popover,
   PopoverContent,
   PopoverTrigger,
   Stack,
-  Text,
-  VStack,
-  Link,
-  useColorModeValue,
+  Text, useColorModeValue, VStack
 } from "@chakra-ui/react";
 import Image from "next/image";
+import NextLink from "next/link";
 import React from "react";
 import diamond from "../assets/img/diamond.png";
-import unicorn from "../assets/img/unicorn.png";
 import me from "../assets/img/me.png";
+import unicorn from "../assets/img/unicorn.png";
 import theme from "../theme";
 
 const title = "web3 playground";
@@ -24,8 +21,8 @@ const description =
 const imageMap: HoverEmojiProps[] = [
   {
     emoji: diamond,
-    title: "coming soon...",
-    description: "the next project, yet to be built...",
+    title: "Solana/Metaplex",
+    description: "Get some NFTs here!!!",
     href: "/nft",
     external: false,
   },
@@ -69,29 +66,29 @@ const HoverEmoji = ({
   return (
     <Popover trigger="hover">
       <PopoverTrigger>
-        <Link
-          href={href}
-          target={external ? "_blank" : ""}
-          w={sizing}
-          h={sizing}
-        >
-          <Image src={emoji} alt={title} />
-        </Link>
+        <Box w={sizing} h={sizing}>
+          <NextLink href={href} passHref>
+            <Link target={external ? "_blank" : ""}>
+              <Image src={emoji} alt={title} />
+            </Link>
+          </NextLink>
+        </Box>
       </PopoverTrigger>
       <PopoverContent border="0px" bg="transparent">
-        <Link
-          href={href}
-          rounded={"md"}
-          target={external ? "_blank" : ""}
-          bg={bgColor}
-          transition=".2s"
-          _hover={{ bg: "#441DA9", transition: ".2s" }}
-        >
-          <Stack color={textColor} p={4} fontSize={"sm"} textAlign={"center"}>
-            <Text fontWeight={800}>{title}</Text>
-            <Text>{description}</Text>
-          </Stack>
-        </Link>
+        <NextLink href={href} passHref>
+          <Link
+            rounded={"md"}
+            target={external ? "_blank" : ""}
+            bg={bgColor}
+            transition=".2s"
+            _hover={{ bg: "#441DA9", transition: ".2s" }}
+          >
+            <Stack color={textColor} p={4} fontSize={"sm"} textAlign={"center"}>
+              <Text fontWeight={800}>{title}</Text>
+              <Text>{description}</Text>
+            </Stack>
+          </Link>
+        </NextLink>
       </PopoverContent>
     </Popover>
   );
