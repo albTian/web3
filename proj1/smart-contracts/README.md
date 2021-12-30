@@ -1,20 +1,7 @@
-# Basic Sample Hardhat Project
-
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
-
-Try running some of the following tasks:
-
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-node scripts/sample-script.js
-npx hardhat help
-```
-
----
-To test,
-1. `npx hardhat node` Create local Etherium network
-2. `npx hardhat run scripts/deploy.ts --network localhost` Deploy locally
+# How to update after changing the SMART CONTRACT (project 1) OUT OF DATE
+1. Test inside `smart-contracts` using `npx hardhat run scripts/run.ts`
+2. Deploy again using `npx hardhat run scripts/deploy.ts --network rinkeby`
+3. Change `contractAddress` in `frontend/src/api/wavePortalAPI.ts` to be the new `contractAddress`.
+4. Get the updated abi file from `smart-contracts/artifacts/contracts/WavePortal.sol/WavePortal.json`
+   1. Try `cp smart-contracts/artifacts/contracts/WavePortal.sol/WavePortal.json frontend/src/utils/WavePortal.json` to copy the file over
+5. git commit and push
