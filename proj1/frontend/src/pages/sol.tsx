@@ -8,7 +8,7 @@ import CandyMachine from "../components/CandyMachine";
 import { Container } from "../components/Container";
 import theme from "../theme";
 
-const NFT = () => {
+const Sol = () => {
   // API specific
   const [walletAddress, setWalletAddress] = useState<Keypair>();
 
@@ -68,4 +68,4 @@ const NFT = () => {
   );
 };
 
-export default NFT;
+export default Sol;

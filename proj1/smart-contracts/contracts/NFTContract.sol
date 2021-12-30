@@ -80,6 +80,10 @@ contract NFTContract is ERC721URIStorage {
             abi.encodePacked(baseSvg, combinedWord, "</text></svg>")
         );
 
+        console.log("\n--------------------");
+        console.log(finalSvg);
+        console.log("--------------------\n");
+
         // Get all the JSON metadata in place and base64 encode it.
         string memory json = Base64.encode(
             bytes(
@@ -103,7 +107,14 @@ contract NFTContract is ERC721URIStorage {
         );
 
         console.log("\n--------------------");
-        console.log(finalTokenUri);
+        console.log(
+            string(
+                abi.encodePacked(
+                    "https://nftpreview.0xdev.codes/?code=",
+                    finalTokenUri
+                )
+            )
+        );
         console.log("--------------------\n");
 
         // Actually mint the NFT to the sender using msg.sender.

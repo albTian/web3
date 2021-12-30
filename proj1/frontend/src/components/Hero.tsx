@@ -23,7 +23,7 @@ const imageMap: HoverEmojiProps[] = [
     emoji: diamond,
     title: "Solana/Metaplex",
     description: "Get some NFTs here!!!",
-    href: "/nft",
+    href: "/sol",
     external: false,
   },
   {

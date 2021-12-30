@@ -364,11 +364,4 @@ const getMints = async (mints: any, setMints: any) => {
   }
 };
 
-// const getData = async () => {
-//   const data = (await fetchHashTable(
-//     process.env.NEXT_PUBLIC_CANDY_MACHINE_ID || "",
-//     true
-//   )) as MetadataData[];
-// };
-
 export { mintToken, getMints };
