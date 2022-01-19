@@ -10,6 +10,7 @@
     "@chakra-ui/icons": "^1.0.5",
     "@chakra-ui/react": "^1.4.2",
     "@chakra-ui/theme-tools": "1.1.2",
+    "@clerk/nextjs": "^2.8.0",
     "@emotion/react": "11.1.5",
     "@emotion/styled": "11.1.5",
     "@metaplex/js": "4.7.0",
